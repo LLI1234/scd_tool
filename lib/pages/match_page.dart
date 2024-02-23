@@ -63,6 +63,7 @@ class _MatchPageState extends State<MatchPage> {
                 CenterCard(),
                 SizedBox(height: 20.0),
                 CenterCard(),
+                SizedBox(height: 20.0),
               ],
             ),
           ),
@@ -86,13 +87,36 @@ class CenterCard extends StatelessWidget {
       },
       child: Center(
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          width: double.infinity,
-          height: 110.0,
-        ),
+            decoration: BoxDecoration(
+              color: Colors.black54,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            width: double.infinity,
+            height: 110.0,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Treatment Center Name',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Treatment Center Address',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }
