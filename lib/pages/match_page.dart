@@ -88,7 +88,12 @@ class CenterCard extends StatelessWidget {
       child: Center(
         child: Container(
             decoration: BoxDecoration(
-              color: Colors.black54,
+              image: DecorationImage(
+                image: AssetImage('images/rwj_cancer_institute.jpeg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.3), BlendMode.darken),
+              ),
               borderRadius: BorderRadius.circular(5.0),
             ),
             width: double.infinity,
@@ -136,7 +141,121 @@ class CenterDetailsPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text('Center Details Page'),
+        child: Container(
+          width: double.infinity,
+          color: Colors.black26,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Image.asset('images/rwj_cancer_institute.jpeg',
+                  fit: BoxFit.cover, height: 160.0),
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Treatment Center Name',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '5.0',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Treatment Center Address',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Icon(Icons.directions_walk,
+                                color: Colors.blue, size: 36.0),
+                            Text('30 Min'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Icon(Icons.directions_car,
+                                color: Colors.blue, size: 36.0),
+                            Text('5 Min'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Icon(Icons.directions_transit,
+                                color: Colors.blue, size: 36.0),
+                            Text('20 Min'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Icon(Icons.directions_bike,
+                                color: Colors.blue, size: 36.0),
+                            Text('15 Min'),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Text("Treatments Offered"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                      ],
+                    ),
+                    Text("Insurances Accepted"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 110.0,
+                          height: 70.0,
+                          color: Colors.blue,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
