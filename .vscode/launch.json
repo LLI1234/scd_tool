@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Jinhyeok/Documents/GitHub/scd_tool",
-      "program": "c:/Users/Jinhyeok/Documents/GitHub/scd_tool/build/Debug/outDebug",
+      "cwd": "c:/Users/arili/OneDrive/Documents/scd_tool",
+      "program": "c:/Users/arili/OneDrive/Documents/scd_tool/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'pages/match_page.dart';
 import 'pages/profile_page.dart';
+import 'pages/login_page.dart';
+import 'pages/login_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [BlocProvider<LoginBloc>(
+              create: (context) =>
+                  LoginBloc(),
+            )], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +24,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MainPage(title: 'Flutter Demo Match Page'),
+      home: const LoginPage(),
     );
   }
 }
