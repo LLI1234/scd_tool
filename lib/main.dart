@@ -6,10 +6,11 @@ import 'pages/login_page.dart';
 import 'pages/login_bloc.dart';
 
 void main() {
-  runApp(MultiBlocProvider(providers: [BlocProvider<LoginBloc>(
-              create: (context) =>
-                  LoginBloc(),
-            )], child: const MyApp()));
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<LoginBloc>(
+      create: (context) => LoginBloc(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
