@@ -6,32 +6,35 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:scd_tool/api/api_service.dart';
+import '../models/login_model.dart';
+
 // import 'dart:io';
 // import 'package:scd_tool/main.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
-Future<int> login() async{
-  final response = await http.post(Uri.parse('http://127.0.0.1:5000/session'));
-  return response.statusCode;
+class APILogin {
 }
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  
   LoginBloc(): super(LoginInitial()) {
+    APIService apiService = APIService();
     on<LoginButtonPressed>((event, emit) async {
+      LoginRequestModel reqMod = LoginRequestModel(email: event.email, password: event.password);
       emit(LoginLoading());
+      
       try {
         // Make login api call
-        login().then(
-          (response) {
-            if(response == 200){
-              emit(LoginSuccess());
-            }
-            emit(const LoginFailure(error: "L + ratio"));
-          }
-        );
-      } catch(error) {
+        LoginResponseModel response = await apiService.login(reqMod);
+        if(response.token.isNotEmpty){
+          emit(LoginSuccess());
+        }
+        emit(const LoginFailure(error: "fail"));
+      } 
+      catch(error) {
         emit(LoginFailure(error: error.toString()));
       }
     });

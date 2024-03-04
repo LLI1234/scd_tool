@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scd_tool/main.dart';
 
+import '../models/login_model.dart';
 import 'login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,15 +15,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginScreenState extends State < LoginPage > {
- final _emailController = TextEditingController();
- final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late LoginRequestModel loginRequestModel;
 
  @override
- void dispose() {
-  _emailController.dispose();
-  _passwordController.dispose();
-  super.dispose();
- }
+  void initState() {
+    super.initState();
+    loginRequestModel =  LoginRequestModel(email: "test", password: "test");
+  }
 
  @override
  Widget build(BuildContext context) {
@@ -52,6 +53,10 @@ class _LoginScreenState extends State < LoginPage > {
          mainAxisAlignment: MainAxisAlignment.center,
          children: < Widget > [
           TextFormField(
+           // test code 
+           keyboardType: TextInputType.emailAddress,
+           onSaved: (input) => loginRequestModel.email = input!,
+           // test code ends
            controller: _emailController,
            decoration: const InputDecoration(
             labelText: 'Email',
@@ -60,6 +65,10 @@ class _LoginScreenState extends State < LoginPage > {
           ),
           const SizedBox(height: 16),
            TextFormField(
+            // test code 
+            keyboardType: TextInputType.text,
+            onSaved: (input) => loginRequestModel.password = input!,
+            // test code ends
             controller: _passwordController,
             obscureText: true,
             decoration: const InputDecoration(
