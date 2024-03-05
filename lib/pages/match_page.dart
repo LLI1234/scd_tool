@@ -79,7 +79,7 @@ class _MatchPageState extends State<MatchPage> {
                           'Selected By Users Like You',
                           style: TextStyle(
                             fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -96,7 +96,7 @@ class _MatchPageState extends State<MatchPage> {
                           'Matches For You',
                           style: TextStyle(
                             fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -149,6 +149,15 @@ class CenterCard extends StatelessWidget {
                     Colors.black.withOpacity(0.3), BlendMode.darken),
               ),
               borderRadius: BorderRadius.circular(5.0),
+              boxShadow: [
+                // Add this
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, 1), // changes position of shadow
+                ),
+              ],
             ),
             width: double.infinity,
             height: 120.0,
@@ -164,7 +173,7 @@ class CenterCard extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
@@ -213,7 +222,7 @@ class CenterDetailsPage extends StatelessWidget {
                     alignment: Alignment.topLeft, // Adjust this as needed
                     children: <Widget>[
                       Image.asset(
-                        'images/rwj_cancer_institute.jpeg',
+                        'images/placeholder.png',
                         fit: BoxFit.cover,
                         width: double.infinity,
                       ),
@@ -253,7 +262,7 @@ class CenterDetailsPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
@@ -332,27 +341,31 @@ class CenterDetailsPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 5.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                        ],
+                      Wrap(
+                        spacing: 8.0, // gap between adjacent chips
+                        runSpacing: 4.0, // gap between lines
+                        children: center['treatments'].map<Widget>((treatment) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text('•',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16.0)),
+                              SizedBox(width: 5.0), // Add some space
+                              Text(
+                                treatment['type']
+                                    .split('_')
+                                    .map((str) =>
+                                        '${str[0].toUpperCase()}${str.substring(1)}')
+                                    .join(' '), // The name of the insurance
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16.0),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
-                      SizedBox(height: 5.0),
+                      SizedBox(height: 15.0),
                       Text(
                         "Insurances Accepted",
                         style: TextStyle(
@@ -362,25 +375,29 @@ class CenterDetailsPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 5.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                          Container(
-                            width: 110.0,
-                            height: 70.0,
-                            color: Colors.black12,
-                          ),
-                        ],
+                      Wrap(
+                        spacing: 8.0, // gap between adjacent chips
+                        runSpacing: 4.0, // gap between lines
+                        children: center['insurances'].map<Widget>((insurance) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text('•',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16.0)),
+                              SizedBox(width: 5.0), // Add some space
+                              Text(
+                                insurance['name']
+                                    .split('_')
+                                    .map((str) =>
+                                        '${str[0].toUpperCase()}${str.substring(1)}')
+                                    .join(' '), // The name of the insurance
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16.0),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
                       SizedBox(height: 15.0),
                       Row(
@@ -408,7 +425,7 @@ class CenterDetailsPage extends StatelessWidget {
                                 child: IconButton(
                                   onPressed: _launchURL,
                                   icon: Icon(Icons.call),
-                                  color: Colors.blue,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             )

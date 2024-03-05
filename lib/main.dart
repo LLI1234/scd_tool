@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 128, 0, 32)),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -61,8 +62,8 @@ class _MainPageState extends State<MainPage> {
           children: screens,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
           unselectedItemColor: Theme.of(context).colorScheme.onBackground,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
