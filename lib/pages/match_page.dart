@@ -64,53 +64,50 @@ class _MatchPageState extends State<MatchPage> {
           return Text('Error: ${snapshot.error}');
         } else {
           return Scaffold(
-            body: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.90, //Max width
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: 20.0),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Selected By Users Like You',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
+            body: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Selected By Users Like You',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Padding(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: CenterCard(
+                        center: similarCenter,
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Matches For You',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    ...scoredCenters.map((center) {
+                      return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: CenterCard(
-                          center: similarCenter,
+                          center: center,
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Matches For You',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      ...scoredCenters.map((center) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: CenterCard(
-                            center: center,
-                          ),
-                        );
-                      }).toList(),
-                      SizedBox(height: 20.0),
-                    ],
-                  ),
+                      );
+                    }).toList(),
+                  ],
                 ),
               ),
             ),
@@ -143,8 +140,11 @@ class CenterCard extends StatelessWidget {
         child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image:
-                    NetworkImage(center['image_link'] ?? 'default_image_link'),
+                image: center['image_link'] != null
+                    ? NetworkImage(center['image_link'])
+                        as ImageProvider<Object>
+                    : AssetImage('assets/images/placeholder.png')
+                        as ImageProvider<Object>,
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.5), BlendMode.darken),
