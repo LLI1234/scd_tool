@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'pages/match_page.dart';
 import 'pages/profile_page.dart';
+import 'pages/login_page.dart';
+import 'pages/login_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<LoginBloc>(
+      create: (context) => LoginBloc(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,11 +21,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 128, 0, 32)),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MainPage(title: 'Flutter Demo Match Page'),
+      home: const LoginPage(),
     );
   }
 }
@@ -54,8 +62,8 @@ class _MainPageState extends State<MainPage> {
           children: screens,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
           unselectedItemColor: Theme.of(context).colorScheme.onBackground,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
