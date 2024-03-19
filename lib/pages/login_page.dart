@@ -41,7 +41,8 @@ class _LoginScreenState extends State < LoginPage > {
        duration: const Duration(seconds: 3),
       ));
      }
-     if (state is LoginSuccess) {
+     else if (state is LoginSuccess) {
+      // print(context.read<LoginBloc>().state);
       Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(title: "SCD Tool")));
      }
     },

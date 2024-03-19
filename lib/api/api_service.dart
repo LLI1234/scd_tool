@@ -12,9 +12,10 @@ class APIService {
       },
       body: jsonEncode(requestModel)
     );
-    print(requestModel.toJson());
+    // print(requestModel.toJson());
     if(response.statusCode == 200) {
-      return LoginResponseModel(token: response.headers['set-cookie']!.substring(9), error: "");
+      // print(response.headers['set-cookie']!.substring(9));
+      return LoginResponseModel(token: response.headers['set-cookie']!.substring(9, response.headers['set-cookie']!.indexOf(';')), error: "");
     }
     else if(response.statusCode == 401){
       return LoginResponseModel(token: "", error: "Login Failed");

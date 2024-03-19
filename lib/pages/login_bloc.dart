@@ -30,9 +30,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // Make login api call
         LoginResponseModel response = await apiService.login(reqMod);
         if(response.token.isNotEmpty){
-          emit(LoginSuccess());
+          emit(LoginSuccess(token: response.token));
         }
-        emit(const LoginFailure(error: "fail"));
+        else{
+          emit(const LoginFailure(error: "fail"));
+        }
       } 
       catch(error) {
         emit(LoginFailure(error: error.toString()));

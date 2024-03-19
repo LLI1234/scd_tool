@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'login_bloc.dart';
 
 class MatchPage extends StatefulWidget {
   const MatchPage({super.key});
@@ -18,7 +20,7 @@ class _MatchPageState extends State<MatchPage> {
 
   Future<void> getScoredCenters() async {
     final response = await http.get(Uri.parse('http://localhost:5000/center'));
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       setState(() {
         scoredCenters =
@@ -31,7 +33,7 @@ class _MatchPageState extends State<MatchPage> {
 
   Future<void> getSimilarCenter() async {
     final response = await http.get(Uri.parse('http://localhost:5000/center'));
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       setState(() {
         similarCenter =
@@ -51,6 +53,7 @@ class _MatchPageState extends State<MatchPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<LoginBloc>().state.props);
     return FutureBuilder(
       future: Future.wait([scoredCentersFuture, similarCenterFuture]),
       builder: (context, snapshot) {
