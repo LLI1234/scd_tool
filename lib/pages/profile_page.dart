@@ -32,7 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.grey,
                   ),
                   SizedBox(width: 10.0), //SizedBox
-
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,6 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
