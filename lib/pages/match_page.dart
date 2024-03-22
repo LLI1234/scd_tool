@@ -54,7 +54,6 @@ class _MatchPageState extends State<MatchPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<LoginBloc>().state.props);
     return FutureBuilder(
       future: Future.wait([scoredCentersFuture, similarCenterFuture]),
       builder: (context, snapshot) {
