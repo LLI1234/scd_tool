@@ -10,8 +10,8 @@ List<String> ethnicity = ['Caucasian', 'African-American', 'Hispanic', 'Asian', 
 List<String> insurance = ['Centene Corporation', 'Humana', 'Molina Healthcare', 'Cigna', 
                           'Blue Cross Blue Shield Corporation', 'Health Care Service Corporation', 'Anthem Inc', 'Aetna', 
                           'UnitedHealth Group', 'Kaiser Permanente', 'Other'];
-List<String> education = ['Discontinuted high-school (without completion)', 'GED Degree', 
-                          'Some college or vocatational training', 'Bachelor\'s Degree', 'Master\'s Degree', 
+List<String> education = ['Discontinued high-school (without completion)', 'High School Graduate/GED Degree', 
+                          'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 
                           'Doctorate Degree', 'Other'];
 List<String> preferredTransporation = ['Driving', 'Transit', 'Other'];
 String? selectedEthnicity = 'Other';
@@ -104,9 +104,9 @@ class _RegisterPageState extends State<RegisterPage>{
               ), 
               Slider(
                 value: selectedConciseOutgoing,
-                min: 1,
+                min: 0,
                 max: 10,
-                divisions: 9,
+                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedConciseOutgoing = value;
@@ -122,9 +122,9 @@ class _RegisterPageState extends State<RegisterPage>{
               ), 
               Slider(
                 value: selectedCompassionateAnalytical,
-                min: 1,
+                min: 0,
                 max: 10,
-                divisions: 9,
+                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedCompassionateAnalytical = value;
@@ -140,9 +140,9 @@ class _RegisterPageState extends State<RegisterPage>{
               ), 
               Slider(
                 value: selectedOrganizedFlexible,
-                min: 1,
+                min: 0,
                 max: 10,
-                divisions: 9,
+                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedOrganizedFlexible = value;
@@ -158,9 +158,9 @@ class _RegisterPageState extends State<RegisterPage>{
               ), 
               Slider(
                 value: selectedRespectfulCurious,
-                min: 1,
+                min: 0,
                 max: 10,
-                divisions: 9,
+                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedRespectfulCurious = value;
@@ -176,9 +176,9 @@ class _RegisterPageState extends State<RegisterPage>{
               ), 
               Slider(
                 value: selectedHumbleAmbitious,
-                min: 1,
+                min: 0,
                 max: 10,
-                divisions: 9,
+                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedHumbleAmbitious = value;
@@ -380,7 +380,7 @@ class _RegisterPageState extends State<RegisterPage>{
                   validator: MultiValidator([RequiredValidator(errorText: 'Enter first name')]), 
                   decoration: const InputDecoration( 
                     hintText: 'Enter first Name', 
-                    labelText: 'first name', 
+                    labelText: 'First name', 
                     prefixIcon: Icon( 
                       Icons.person, 
                       color: Colors.green, 
