@@ -24,4 +24,8 @@ class APIService {
       throw Exception('Failed to load data!');
     }
   }
+
+  Future register() async{
+    
+  }
 }

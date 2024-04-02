@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
 
-  final String title;
+  final String title; 
 
   @override
   State<MainPage> createState() => _MainPageState();
