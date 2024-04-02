@@ -115,7 +115,75 @@ class _MatchCardState extends State<MatchCard> {
                                     selected: widget.selected,
                                     onSelected: (bool selected) {
                                       setState(() {
-                                        widget.selected = !widget.selected;
+                                        if (!widget.selected && selected) {
+                                          Future.delayed(
+                                              Duration(milliseconds: 500), () {
+                                            showGeneralDialog(
+                                              context: context,
+                                              barrierDismissible: true,
+                                              barrierLabel:
+                                                  MaterialLocalizations.of(
+                                                          context)
+                                                      .modalBarrierDismissLabel,
+                                              barrierColor: Colors.black45,
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                              pageBuilder:
+                                                  (BuildContext buildContext,
+                                                      Animation animation,
+                                                      Animation
+                                                          secondaryAnimation) {
+                                                return Center(
+                                                  child: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            10,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            80,
+                                                    padding: EdgeInsets.all(20),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Text('Review'),
+                                                        Text(
+                                                            'Please leave a review for the physician'),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Text("OK"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              transitionBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
+                                            );
+                                          });
+                                        }
+                                        widget.selected = selected;
                                       });
                                     },
                                     labelStyle: TextStyle(
