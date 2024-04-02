@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart'; 
 import 'package:form_field_validator/form_field_validator.dart'; 
 import 'package:flutter/foundation.dart';
-import 'package:im_stepper/stepper.dart'; 
+import 'package:im_stepper/stepper.dart';
+import 'package:scd_tool/components/personality_slider.dart'; 
 
 List<String> ethnicity = ['Caucasian', 'African-American', 'Hispanic', 'Asian', 'Native American', 'Other'];
 List<String> insurance = ['Centene Corporation', 'Humana', 'Molina Healthcare', 'Cigna', 
@@ -95,78 +96,52 @@ class _RegisterPageState extends State<RegisterPage>{
                 'Please describe yourself by following these prompts',
               style: TextStyle(fontSize: 20),
               ),
-              const Center(
-                child: Text(
-                  'Concise vs Outgoing',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ), 
-              Slider(
+              PersonalitySlider(
+                title: 'Concise vs Outgoing',
                 value: selectedConciseOutgoing,
-                min: 0,
-                max: 10,
-                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedConciseOutgoing = value;
                   });
-                },
+                }
               ),
-              const Center(
-                child: Text(
-                  'Compassionate vs Analytical',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ), 
-              Slider(
+              PersonalitySlider(
+                title: 'Compassionate vs Analytical',
                 value: selectedCompassionateAnalytical,
-                min: 0,
-                max: 10,
-                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedCompassionateAnalytical = value;
                   });
-                },
+                }
               ),
-              const Center(
-                child: Text(
-                  'Organized vs Flexible',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ), 
-              Slider(
+              PersonalitySlider(
+                title: 'Organized vs Flexible',
                 value: selectedOrganizedFlexible,
-                min: 0,
-                max: 10,
-                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedOrganizedFlexible = value;
                   });
-                },
+                }
               ),
-              const Center(
-                child: Text(
-                  'Respectful vs Curious',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ), 
-              Slider(
+              PersonalitySlider(
+                title: 'Respectful vs Curious',
                 value: selectedRespectfulCurious,
-                min: 0,
-                max: 10,
-                divisions: 10,
                 onChanged: (double value){
                   setState(() {
                     selectedRespectfulCurious = value;
                   });
-                },
+                }
               ),
+              PersonalitySlider(
+                title: 'Humble vs Ambitious',
+                value: selectedHumbleAmbitious,
+                onChanged: (double value){
+                  setState(() {
+                    selectedHumbleAmbitious = value;
+                  });
+                }
+              ),
+              
               const Center(
                 child: Text(
                   'Humble vs Ambitious',
@@ -184,26 +159,6 @@ class _RegisterPageState extends State<RegisterPage>{
                     selectedHumbleAmbitious = value;
                   });
                 },
-              ),
-              Center( 
-                child: Padding( 
-                  padding: const EdgeInsets.all(18.0), 
-                  child: Container( 
-                    child: ElevatedButton( 
-                      child: const Text( 
-                        'Register', 
-                        style: TextStyle(color: Colors.blue, fontSize: 22), 
-                      ), 
-                      onPressed: (){
-                        if(personalFormKey.currentState?.validate() ?? false){
-                          print('registered');
-                        }
-                      }, 
-                    ), 
-                    width: MediaQuery.of(context).size.width, 
-                    height: 50, 
-                  ), 
-                )
               ),
             ],
           ),
