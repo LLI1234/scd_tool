@@ -6,27 +6,26 @@ import 'dart:convert';
 import '../components/match_card.dart';
 import 'login_bloc.dart';
 
-class MatchPage extends StatefulWidget {
-  const MatchPage({super.key});
+class SavedPage extends StatefulWidget {
+  const SavedPage({super.key});
 
   @override
-  State<MatchPage> createState() => _MatchPageState();
+  State<SavedPage> createState() => _SavedPageState();
 }
 
-class _MatchPageState extends State<MatchPage> {
-  List<Map<String, dynamic>> scoredPhysicians = [];
-  Map<String, dynamic> similarPhysician = {};
-  late Future<void> scoredPhysiciansFuture;
-  late Future<void> similarPhysicianFuture;
+class _SavedPageState extends State<SavedPage> {
+  List<Map<String, dynamic>> savedPhysicians = [];
+  late Future<void> savedPhysiciansFuture;
 
-  Future<void> getScoredPhysicians() async {
+  Future<void> getSavedPhysicians() async {
     final response =
         await http.get(Uri.parse('http://localhost:5000/physician'));
     //print(response.body);
     if (response.statusCode == 200) {
       setState(() {
-        scoredPhysicians =
+        var physicians =
             List<Map<String, dynamic>>.from(json.decode(response.body));
+        savedPhysicians = physicians.take(3).toList();
       });
     } else {
       throw Exception('Failed to load center data');
@@ -54,14 +53,15 @@ class _MatchPageState extends State<MatchPage> {
   @override
   void initState() {
     super.initState();
-    scoredPhysiciansFuture = getScoredPhysicians();
-    similarPhysicianFuture = getScoredPhysicians();
+    savedPhysiciansFuture = getSavedPhysicians();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.wait([scoredPhysiciansFuture, similarPhysicianFuture]),
+      future: Future.wait([
+        savedPhysiciansFuture,
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -84,7 +84,7 @@ class _MatchPageState extends State<MatchPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Selected By Users Like You',
+                        'Saved Physicians',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w700,
@@ -92,30 +92,13 @@ class _MatchPageState extends State<MatchPage> {
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: MatchCard(
-                        physician: scoredPhysicians[0],
-                        hasScore: false,
-                      ),
-                    ),
-                    SizedBox(height: 15.0),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Matches For You',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 5.0),
-                    ...scoredPhysicians.map((physician) {
+                    ...savedPhysicians.map((physician) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: MatchCard(
                           physician: physician,
+                          hasScore: false,
+                          hasSaved: true,
                         ),
                       );
                     }).toList(),
