@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scd_tool/main.dart';
+import 'package:flutter/gestures.dart';
+import 'package:scd_tool/pages/register_page.dart';
+
 
 import '../models/login_model.dart';
 import 'login_bloc.dart';
@@ -64,6 +67,7 @@ class _LoginScreenState extends State < LoginPage > {
             border: OutlineInputBorder(),
            ),
           ),
+
           const SizedBox(height: 16),
            TextFormField(
             // test code 
@@ -77,6 +81,7 @@ class _LoginScreenState extends State < LoginPage > {
              border: OutlineInputBorder(),
             ),
            ),
+
            const SizedBox(height: 16),
             ElevatedButton(
              onPressed: state is!LoginLoading ?
@@ -95,7 +100,18 @@ class _LoginScreenState extends State < LoginPage > {
              const Padding(
               padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator(),
-             ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(text: 'Don\'t have an account? Click here to sign up.',
+                    style: TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                    ..onTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage())),
+                  ),
+                ]
+              ),
+            ), 
          ],
         ),
       );
