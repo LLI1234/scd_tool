@@ -2,6 +2,7 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "details_page.dart";
+import "review_page.dart";
 
 class MatchCard extends StatefulWidget {
   final Map<String, dynamic> physician;
@@ -118,66 +119,69 @@ class _MatchCardState extends State<MatchCard> {
                                         if (!widget.selected && selected) {
                                           Future.delayed(
                                               Duration(milliseconds: 500), () {
-                                            showGeneralDialog(
+                                            showDialog(
                                               context: context,
-                                              barrierDismissible: true,
-                                              barrierLabel:
-                                                  MaterialLocalizations.of(
-                                                          context)
-                                                      .modalBarrierDismissLabel,
-                                              barrierColor: Colors.black45,
-                                              transitionDuration:
-                                                  const Duration(
-                                                      milliseconds: 500),
-                                              pageBuilder:
-                                                  (BuildContext buildContext,
-                                                      Animation animation,
-                                                      Animation
-                                                          secondaryAnimation) {
-                                                return Center(
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width -
-                                                            10,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height -
-                                                            80,
-                                                    padding: EdgeInsets.all(20),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Center(
+                                                    child: Text(
+                                                      'Leave a review for this physician?',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
-                                                    child: Column(
+                                                  ),
+                                                  actions: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
-                                                        Text('Review'),
-                                                        Text(
-                                                            'Please leave a review for the physician'),
-                                                        ElevatedButton(
+                                                        TextButton(
+                                                          child: Text('SKIP'),
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
                                                           },
-                                                          child: Text("OK"),
+                                                        ),
+                                                        ElevatedButton(
+                                                          child: Text('OK',
+                                                              style: TextStyle(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onPrimary)),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      ReviewPage(
+                                                                          physician:
+                                                                              widget.physician)),
+                                                            );
+                                                          },
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty.all<
+                                                                    Color>(Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              transitionBuilder: (context,
-                                                  animation,
-                                                  secondaryAnimation,
-                                                  child) {
-                                                return FadeTransition(
-                                                  opacity: animation,
-                                                  child: child,
+                                                  ],
                                                 );
                                               },
                                             );
