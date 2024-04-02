@@ -82,17 +82,29 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     SizedBox(height: 25.0), //SizedBox
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Personal Information',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Personal Information',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
+                        TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Edit Info',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )),
+                      ],
                     ),
-                    SizedBox(height: 10.0),
                     Container(
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.inversePrimary,
@@ -163,6 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Text(
                             user['address'],
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
@@ -197,7 +210,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.inversePrimary,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0))),
                       margin: EdgeInsets.only(top: 3.0),
                       padding: EdgeInsets.symmetric(
                           vertical: 15.0, horizontal: 20.0),
@@ -213,6 +230,88 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Text(
                             user['ethnicity'],
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0), //SizedBox
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Additional Information',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Edit Info',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0))),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Insurance Provider',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            user['insurance']['name']
+                                .split('_')
+                                .map((str) =>
+                                    '${str[0].toUpperCase()}${str.substring(1)}')
+                                .join(' '),
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      margin: EdgeInsets.only(top: 3.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Preferred Transportation',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            user['preferred_transportation'][0].toUpperCase() +
+                                user['preferred_transportation'].substring(1),
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
@@ -266,151 +365,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Text(
-                            user['education'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20.0), //SizedBox
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Medical Information',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0))),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Insurance Provider',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            user['insurance']['name'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      margin: EdgeInsets.only(top: 3.0),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Preferred Transportation',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            user['preferred_transportation'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      margin: EdgeInsets.only(top: 3.0),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Address',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            user['address'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      margin: EdgeInsets.only(top: 3.0),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Date of Birth',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            user['DoB'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0))),
-                      margin: EdgeInsets.only(top: 3.0),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Income',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            user['education'],
+                            user['income'].toString(),
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
@@ -420,12 +375,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
 
-                    SizedBox(height: 30.0), //SizedBox
-                    Text(
-                      'Onboarding Status',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
+                    SizedBox(height: 20.0), //SizedBox
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Onboarding Status',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0),
