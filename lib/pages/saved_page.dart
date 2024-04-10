@@ -18,37 +18,22 @@ class _SavedPageState extends State<SavedPage> {
   late Future<void> savedPhysiciansFuture;
 
   Future<void> getSavedPhysicians() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:5000/physician'));
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    String cookie = loginBloc.state.props[0] as String;
+    final response = await http.get(
+      Uri.parse('http://localhost:5000/user/current/saved-physician'),
+      headers: {'Cookie': 'session=.$cookie;'},
+    );
     //print(response.body);
     if (response.statusCode == 200) {
       setState(() {
-        var physicians =
+        savedPhysicians =
             List<Map<String, dynamic>>.from(json.decode(response.body));
-        savedPhysicians = physicians.take(3).toList();
       });
     } else {
       throw Exception('Failed to load center data');
     }
   }
-
-  // Future<void> getSimilarPhysician() async {
-  //   final loginBloc = BlocProvider.of<LoginBloc>(context);
-  //   String cookie = loginBloc.state.props[0] as String;
-
-  //   final response = await http.get(
-  //     Uri.parse('http://localhost:5000/match/KNN'),
-  //     headers: {'Cookie': 'session=.$cookie;'},
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     setState(() {
-  //       similarPhysician = Map<String, dynamic>.from(json.decode(response.body));
-  //     });
-  //   } else {
-  //     throw Exception('Failed to load center data');
-  //   }
-  // }
 
   @override
   void initState() {
@@ -99,6 +84,8 @@ class _SavedPageState extends State<SavedPage> {
                           physician: physician,
                           hasScore: false,
                           hasSaved: true,
+                          isSaved: true,
+                          getSavedPhysicians: getSavedPhysicians,
                         ),
                       );
                     }).toList(),

@@ -8,15 +8,23 @@ class MatchCard extends StatefulWidget {
   final Map<String, dynamic> physician;
   final bool hasScore;
   final bool hasSaved;
-  bool selected;
+  bool isSaved;
+  bool isVisited;
+  final Function getSavedPhysicians;
 
-  MatchCard({
-    Key? key,
-    required this.physician,
-    this.hasScore = true,
-    this.hasSaved = false,
-    this.selected = false,
-  }) : super(key: key);
+  static void defaultFunction() {
+    // This is an empty function that does nothing.
+  }
+
+  MatchCard(
+      {Key? key,
+      required this.physician,
+      this.hasScore = true,
+      this.hasSaved = false,
+      this.isSaved = false,
+      this.isVisited = false,
+      this.getSavedPhysicians = defaultFunction})
+      : super(key: key);
 
   @override
   State<MatchCard> createState() => _MatchCardState();
@@ -30,7 +38,11 @@ class _MatchCardState extends State<MatchCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DetailsPage(physician: widget.physician)),
+              builder: (context) => DetailsPage(
+                    physician: widget.physician,
+                    isSaved: widget.isSaved,
+                    getSavedPhysicians: widget.getSavedPhysicians,
+                  )),
         );
       },
       child: Center(
@@ -110,13 +122,13 @@ class _MatchCardState extends State<MatchCard> {
                                 if (widget
                                     .hasSaved) // If hasSaved is true, render the saved icon
                                   InputChip(
-                                    label: Text(widget.selected
+                                    label: Text(widget.isVisited
                                         ? 'Visited'
                                         : 'Visited?'),
-                                    selected: widget.selected,
+                                    selected: widget.isVisited,
                                     onSelected: (bool selected) {
                                       setState(() {
-                                        if (!widget.selected && selected) {
+                                        if (!widget.isVisited && selected) {
                                           Future.delayed(
                                               Duration(milliseconds: 500), () {
                                             showDialog(
@@ -187,7 +199,7 @@ class _MatchCardState extends State<MatchCard> {
                                             );
                                           });
                                         }
-                                        widget.selected = selected;
+                                        widget.isVisited = selected;
                                       });
                                     },
                                     labelStyle: TextStyle(
