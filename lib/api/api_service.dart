@@ -25,7 +25,4 @@ class APIService {
     }
   }
 
-  Future register() async{
-    
-  }
 }
