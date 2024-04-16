@@ -1,30 +1,21 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
+
 import "details_page.dart";
 import "review_page.dart";
 
 class MatchCard extends StatefulWidget {
   final Map<String, dynamic> physician;
   final bool hasScore;
-  final bool hasSaved;
-  bool isSaved;
+  final bool hasVisited;
   bool isVisited;
-  final Function getSavedPhysicians;
 
-  static void defaultFunction() {
-    // This is an empty function that does nothing.
-  }
-
-  MatchCard(
-      {Key? key,
-      required this.physician,
-      this.hasScore = true,
-      this.hasSaved = false,
-      this.isSaved = false,
-      this.isVisited = false,
-      this.getSavedPhysicians = defaultFunction})
-      : super(key: key);
+  MatchCard({
+    Key? key,
+    required this.physician,
+    this.hasScore = true,
+    this.hasVisited = false,
+    this.isVisited = false,
+  }) : super(key: key);
 
   @override
   State<MatchCard> createState() => _MatchCardState();
@@ -40,8 +31,6 @@ class _MatchCardState extends State<MatchCard> {
           MaterialPageRoute(
               builder: (context) => DetailsPage(
                     physician: widget.physician,
-                    isSaved: widget.isSaved,
-                    getSavedPhysicians: widget.getSavedPhysicians,
                   )),
         );
       },
@@ -120,7 +109,7 @@ class _MatchCardState extends State<MatchCard> {
                                     ),
                                   ),
                                 if (widget
-                                    .hasSaved) // If hasSaved is true, render the saved icon
+                                    .hasVisited) // If hasVisited is true, render the saved icon
                                   InputChip(
                                     label: Text(widget.isVisited
                                         ? 'Visited'

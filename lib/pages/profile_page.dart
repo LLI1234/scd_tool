@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
-import 'login_bloc.dart';
+import '../models/login_data.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,13 +18,10 @@ class _ProfilePageState extends State<ProfilePage> {
   late Future<void> _fetchUserFuture;
 
   Future<void> fetchUser() async {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-    print(loginBloc.state.props);
-    String cookie = loginBloc.state.props[0] as String;
-    print(cookie);
+    String cookie = context.read<LoginData>().getCookie();
     final response = await http.get(
       Uri.parse('http://localhost:5000/user/current'),
-      headers: {'Cookie': 'session=.$cookie;'},
+      headers: {'Cookie': cookie},
     );
 
     if (response.statusCode == 200) {
