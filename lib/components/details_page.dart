@@ -1,25 +1,18 @@
 import "package:flutter/material.dart";
-import 'package:scd_tool/components/bulleted_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
-import '../pages/login_bloc.dart';
+import '../components/bulleted_list_item.dart';
+import '../models/login_data.dart';
+import '../models/app_data.dart';
 
 class DetailsPage extends StatefulWidget {
   final Map<String, dynamic> physician;
-  bool isSaved;
-  final Function getSavedPhysicians;
-
-  static void defaultFunction() {
-    // This is an empty function that does nothing.
-  }
 
   DetailsPage({
     super.key,
     required this.physician,
-    this.isSaved = false,
-    this.getSavedPhysicians = defaultFunction,
   });
 
   @override
@@ -37,18 +30,19 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> savePhysician() async {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-    String cookie = loginBloc.state.props[0] as String;
+    String cookie = context.read<LoginData>().getCookie();
     final response = await http.put(
       Uri.parse(
           'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
-      headers: {'Cookie': 'session=.$cookie;'},
+      headers: {'Cookie': cookie},
     );
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON.
       print('Request successful');
-      widget.getSavedPhysicians();
+      if (mounted) {
+        await context.read<AppData>().getSavedPhysicians();
+      }
     } else {
       // If the server returns an unsuccessful response code, throw an exception.
       throw Exception('Failed to save physician');
@@ -56,18 +50,19 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> unsavePhysician() async {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-    String cookie = loginBloc.state.props[0] as String;
+    String cookie = context.read<LoginData>().getCookie();
     final response = await http.delete(
       Uri.parse(
           'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
-      headers: {'Cookie': 'session=.$cookie;'},
+      headers: {'Cookie': cookie},
     );
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON.
       print('Request successful');
-      widget.getSavedPhysicians();
+      if (mounted) {
+        await context.read<AppData>().getSavedPhysicians();
+      }
     } else {
       // If the server returns an unsuccessful response code, throw an exception.
       throw Exception('Failed to unsave physician');
@@ -123,27 +118,38 @@ class _DetailsPageState extends State<DetailsPage> {
                                   fontWeight: FontWeight.w500,
                                   height: 1.0),
                             ),
-                            InputChip(
-                              label: Text(widget.isSaved ? 'Saved' : 'Save'),
-                              selected: widget.isSaved,
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  widget.isSaved = !widget.isSaved;
-                                });
-                                if (widget.isSaved) {
-                                  savePhysician();
-                                } else {
-                                  unsavePhysician();
-                                }
+                            Consumer<AppData>(
+                              builder: (context, appData, child) {
+                                bool isSaved = appData.savedPhysicians.any(
+                                    (savedPhysician) =>
+                                        savedPhysician['id'] ==
+                                        widget.physician['id']);
+
+                                return InputChip(
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  label: Text(
+                                    isSaved ? 'Saved' : 'Save',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  selected: isSaved,
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  onSelected: (bool selected) {
+                                    if (isSaved) {
+                                      unsavePhysician();
+                                    } else {
+                                      savePhysician();
+                                    }
+                                    // Trigger a rebuild of the Consumer widget to update isSaved
+                                    appData.notifyListeners();
+                                  },
+                                );
                               },
-                              labelStyle: TextStyle(
-                                  color: Colors.white, fontSize: 12.0),
-                              selectedColor:
-                                  Theme.of(context).colorScheme.primary,
-                              backgroundColor: Colors.grey,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
                             ),
                           ],
                         ),
