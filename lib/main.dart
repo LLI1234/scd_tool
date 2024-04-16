@@ -9,6 +9,7 @@ import 'pages/profile_page.dart';
 import 'pages/login_page.dart';
 import 'pages/login_bloc.dart';
 import 'pages/saved_page.dart';
+import 'pages/calendar_page.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
@@ -61,6 +62,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final screens = [
+    CalendarPage(),
     SavedPage(),
     MatchPage(),
     ProfilePage(),
@@ -88,6 +90,12 @@ class _MainPageState extends State<MainPage> {
           selectedIconTheme: IconThemeData(size: 40),
           unselectedIconTheme: IconThemeData(size: 30),
           items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesomeIcons.solidCalendar,
+              ),
+              label: 'Symptoms',
+            ),
             BottomNavigationBarItem(
               icon: Icon(
                 FontAwesomeIcons.bookmark,
