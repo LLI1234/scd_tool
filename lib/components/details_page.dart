@@ -73,6 +73,19 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     List<String> traits = ['Welcoming', 'Knowledgeable'];
 
+    Widget pill(label) {
+      return Chip(
+          label: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))));
+    }
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -83,21 +96,122 @@ class _DetailsPageState extends State<DetailsPage> {
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Container(
-                    height: 180,
-                    child: widget.physician['center']['image_link'] != null
-                        ? FadeInImage.assetNetwork(
-                            placeholder: 'images/placeholder.png',
-                            image: widget.physician['center']['image_link'],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          )
-                        : Image.asset(
-                            'images/placeholder.png',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
-                  ),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(children: [
+                        Flexible(
+                            child:
+                                widget.physician['center']['image_link'] != null
+                                    ? FadeInImage.assetNetwork(
+                                        placeholder: 'images/placeholder.png',
+                                        // image: widget.physician['image_link'],
+                                        image:
+                                            "https://hips.hearstapps.com/hmg-prod/images/portrait-of-a-happy-young-doctor-in-his-clinic-royalty-free-image-1661432441.jpg?crop=0.66698xw:1xh;center,top&resize=640:*",
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        alignment: Alignment.topCenter,
+                                      )
+                                    : Image.asset(
+                                        'images/placeholder.png',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      )),
+                        Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16.0),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        widget.physician['first_name'] +
+                                            ' ' +
+                                            widget.physician['last_name'],
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 30.0,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1.0),
+                                      ),
+                                      Consumer<AppData>(
+                                        builder: (context, appData, child) {
+                                          bool isSaved = appData.savedPhysicians
+                                              .any((savedPhysician) =>
+                                                  savedPhysician['id'] ==
+                                                  widget.physician['id']);
+
+                                          return InputChip(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            label: Text(
+                                              isSaved ? 'Saved' : 'Save',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            selected: isSaved,
+                                            selectedColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            checkmarkColor: Colors.white,
+                                            onSelected: (bool selected) {
+                                              if (isSaved) {
+                                                unsavePhysician();
+                                              } else {
+                                                savePhysician();
+                                              }
+                                              // Trigger a rebuild of the Consumer widget to update isSaved
+                                              appData.notifyListeners();
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    widget.physician['title'],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.physician['center']['address'],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      pill(widget.physician['ethnicity']),
+                                      widget.physician['additional_language'] ==
+                                              'None'
+                                          ? pill("Speaks English")
+                                          : pill(
+                                              "Speaks English and ${widget.physician['additional_language']}"),
+                                      ...traits.map((trait) {
+                                        return pill(trait);
+                                      })
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.0)
+                                ]))
+                      ])),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -106,77 +220,15 @@ class _DetailsPageState extends State<DetailsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              widget.physician['first_name'] +
-                                  ' ' +
-                                  widget.physician['last_name'],
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.0),
-                            ),
-                            Consumer<AppData>(
-                              builder: (context, appData, child) {
-                                bool isSaved = appData.savedPhysicians.any(
-                                    (savedPhysician) =>
-                                        savedPhysician['id'] ==
-                                        widget.physician['id']);
-
-                                return InputChip(
-                                  backgroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                  label: Text(
-                                    isSaved ? 'Saved' : 'Save',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  selected: isSaved,
-                                  selectedColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  onSelected: (bool selected) {
-                                    if (isSaved) {
-                                      unsavePhysician();
-                                    } else {
-                                      savePhysician();
-                                    }
-                                    // Trigger a rebuild of the Consumer widget to update isSaved
-                                    appData.notifyListeners();
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        Text(
-                          widget.physician['title'],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          widget.physician['center']['address'],
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 25.0),
+                            Expanded(
+                                child: Container(
+                              margin: EdgeInsets.only(right: 7.5),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -203,87 +255,46 @@ class _DetailsPageState extends State<DetailsPage> {
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(width: 20.0),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 25.0),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '5.0',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 50,
-                                        height: 1.0),
+                            )),
+                            Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 7.5),
+                                  padding: EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  Text(
-                                    'Match Score',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '5.0',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 50,
+                                            height: 1.0),
+                                      ),
+                                      Text(
+                                        'Match Score',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                             ),
                           ],
                         ),
-                        SizedBox(height: 15.0),
-                        Text(
-                          "Ethnicity",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child:
-                              BulletedListItem(widget.physician['ethnicity']),
-                        ),
-                        SizedBox(height: 10.0),
-                        Text(
-                          "Additional Language",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: BulletedListItem(
-                              widget.physician['additional_language']),
-                        ),
-                        SizedBox(height: 10.0),
-                        Text(
-                          "Traits",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        ...traits.map((trait) {
-                          return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: BulletedListItem(trait));
-                        }).toList(),
-                        SizedBox(height: 10.0),
+                        SizedBox(height: 20.0),
                         Text(
                           "Center Information",
                           style: TextStyle(
@@ -372,27 +383,34 @@ class _DetailsPageState extends State<DetailsPage> {
                         SizedBox(height: 5.0),
                         Wrap(
                           spacing: 8.0, // gap between adjacent chips
-                          runSpacing: 4.0, // gap between lines
+                          runSpacing: 8.0, // gap between lines
                           children: widget.physician['center']['insurances']
                               .map<Widget>((insurance) {
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text('•',
-                                    style: TextStyle(
-                                        color: Colors.black87, fontSize: 16.0)),
-                                SizedBox(width: 5.0), // Add some space
-                                Text(
-                                  insurance['name']
-                                      .split('_')
-                                      .map((str) =>
-                                          '${str[0].toUpperCase()}${str.substring(1)}')
-                                      .join(' '), // The name of the insurance
-                                  style: TextStyle(
-                                      color: Colors.black87, fontSize: 16.0),
-                                ),
-                              ],
+                            return pill(
+                              insurance['name']
+                                  .split('_')
+                                  .map((str) =>
+                                      '${str[0].toUpperCase()}${str.substring(1)}')
+                                  .join(' '),
                             );
+                            // return Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: <Widget>[
+                            //     Text('•',
+                            //         style: TextStyle(
+                            //             color: Colors.black87, fontSize: 16.0)),
+                            //     SizedBox(width: 5.0), // Add some space
+                            //     Text(
+                            //       insurance['name']
+                            //           .split('_')
+                            //           .map((str) =>
+                            //               '${str[0].toUpperCase()}${str.substring(1)}')
+                            //           .join(' '), // The name of the insurance
+                            //       style: TextStyle(
+                            //           color: Colors.black87, fontSize: 16.0),
+                            //     ),
+                            //   ],
+                            // );
                           }).toList(),
                         ),
                         SizedBox(height: 25.0),

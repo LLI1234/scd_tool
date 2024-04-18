@@ -58,7 +58,7 @@ class _MatchCardState extends State<MatchCard> {
                   Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: widget.physician['center']['image_link'] !=
+                          image: widget.physician['image_link'] !=
                                   null
                               ? NetworkImage(
                                       widget.physician['center']['image_link'])
