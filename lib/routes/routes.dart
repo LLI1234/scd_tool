@@ -4,6 +4,7 @@ import "package:scd_tool/pages/main_page.dart";
 import "package:scd_tool/pages/match_page.dart";
 import "package:scd_tool/pages/profile_page.dart";
 import "package:scd_tool/pages/saved_page.dart";
+import "package:scd_tool/pages/calendar_page.dart";
 
 class RouteManager {
   static const String login = "/login";
@@ -11,6 +12,7 @@ class RouteManager {
   static const String match = "/match";
   static const String profile = "/profile";
   static const String saved = "/saved";
+  static const String calendar = "/calendar";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -24,6 +26,8 @@ class RouteManager {
         return MaterialPageRoute(builder: (context) => const ProfilePage());
       case saved:
         return MaterialPageRoute(builder: (context) => const SavedPage());
+      case calendar:
+        return MaterialPageRoute(builder: (context) => const CalendarPage());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(

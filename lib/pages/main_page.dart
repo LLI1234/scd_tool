@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'match_page.dart';
 import 'profile_page.dart';
 import 'saved_page.dart';
+import 'calendar_page.dart';
 
 import '../models/app_data.dart';
 import '../models/login_data.dart';
@@ -18,12 +19,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final screens = [
+    CalendarPage(),
     SavedPage(),
     MatchPage(),
     ProfilePage(),
   ];
 
-  int selectedIndex = 1;
+  int selectedIndex = 2;
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -39,12 +41,19 @@ class _MainPageState extends State<MainPage> {
         return Scaffold(
           body: screens[selectedIndex],
           bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             backgroundColor: Theme.of(context).colorScheme.primary,
             selectedItemColor: Theme.of(context).colorScheme.onPrimary,
             unselectedItemColor: Theme.of(context).colorScheme.onBackground,
-            selectedIconTheme: IconThemeData(size: 40),
-            unselectedIconTheme: IconThemeData(size: 30),
+            selectedIconTheme: IconThemeData(size: 30),
+            unselectedIconTheme: IconThemeData(size: 25),
             items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesomeIcons.calendar,
+              ),
+              label: 'Symptoms',
+              ),
               BottomNavigationBarItem(
                 icon: Icon(
                   FontAwesomeIcons.bookmark,
