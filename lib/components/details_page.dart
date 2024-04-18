@@ -71,9 +71,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> traits = ['Welcoming', 'Knowledgeable'];
-
-    Widget pill(label) {
+    Widget pill(label, [match]) {
       return Chip(
           label: Text(
             label,
@@ -82,8 +80,36 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
           backgroundColor: Colors.white,
+          side: match != null && match
+              ? BorderSide(
+                  color: Theme.of(context).colorScheme.primary, width: 2)
+              : BorderSide(color: Theme.of(context).colorScheme.onBackground),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))));
+    }
+
+    var traits = [
+      ['Efficient', 'Patient'],
+      ['Empathetic', 'Analytical'],
+      ['Structured', 'Flexible'],
+      ['Respectful', 'Direct'],
+      ['Humble', 'Ambitious']
+    ];
+    context.read<AppData>().getUserInfo();
+    var userData = context.read<AppData>().userInfo;
+    List<Widget> attrs = [];
+
+    for (var i = 0; i < traits.length; i++) {
+      var attr = widget.physician["avg_attr"]["attribute${i + 1}"];
+      var pref = userData["attribute${i + 1}"];
+      if (attr == null) {
+        continue;
+      }
+      if (attr < 0.4) {
+        attrs.add(pill(traits[i][0], pref < 0.4));
+      } else if (attr > 0.6) {
+        attrs.add(pill(traits[i][0], pref > 0.6));
+      }
     }
 
     return Scaffold(
@@ -204,9 +230,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                           ? pill("Speaks English")
                                           : pill(
                                               "Speaks English and ${widget.physician['additional_language']}"),
-                                      ...traits.map((trait) {
-                                        return pill(trait);
-                                      })
+                                      ...attrs
                                     ],
                                   ),
                                   SizedBox(height: 10.0)
@@ -214,7 +238,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ])),
                   Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        EdgeInsets.only(bottom: 8.0, left: 16.0, right: 16.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +259,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '5.0',
+                                    widget.physician["avg_user_rating"]
+                                        .toStringAsFixed(1),
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -294,126 +319,120 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.0),
-                        Text(
-                          "Center Information",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: BulletedListItem(
-                              widget.physician['center']['name']),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: BulletedListItem(
-                              widget.physician['center']['address']),
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
+                        SizedBox(height: 15.0),
+                        Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color:
+                                    Theme.of(context).colorScheme.background),
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.directions_walk_outlined,
-                                    color: Colors.black87, size: 36.0),
-                                Text(
-                                  '30 Min',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              Text(
+                                widget.physician['center']['name'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Icon(Icons.directions_car_outlined,
-                                    color: Colors.black87, size: 36.0),
-                                Text(
-                                  '5 Min',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w600,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Text(
+                                    widget.physician['center']['address'],
+                                    textAlign: TextAlign.center,),
+                              ),
+                              SizedBox(height: 20.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Icon(Icons.directions_walk_outlined,
+                                          color: Colors.black87, size: 36.0),
+                                      Text(
+                                        '30 Min',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Icon(Icons.directions_transit_outlined,
-                                    color: Colors.black87, size: 36.0),
-                                Text(
-                                  '20 Min',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w600,
+                                  Column(
+                                    children: [
+                                      Icon(Icons.directions_car_outlined,
+                                          color: Colors.black87, size: 36.0),
+                                      Text(
+                                        '5 Min',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Icon(Icons.directions_bike_outlined,
-                                    color: Colors.black87, size: 36.0),
-                                Text(
-                                  '15 Min',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w600,
+                                  Column(
+                                    children: [
+                                      Icon(Icons.directions_transit_outlined,
+                                          color: Colors.black87, size: 36.0),
+                                      Text(
+                                        '20 Min',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  Column(
+                                    children: [
+                                      Icon(Icons.directions_bike_outlined,
+                                          color: Colors.black87, size: 36.0),
+                                      Text(
+                                        '15 Min',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20.0),
+                              Text(
+                                "Insurances Accepted",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Text(
-                          "Insurances Accepted",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        Wrap(
-                          spacing: 8.0, // gap between adjacent chips
-                          runSpacing: 8.0, // gap between lines
-                          children: widget.physician['center']['insurances']
-                              .map<Widget>((insurance) {
-                            return pill(
-                              insurance['name']
-                                  .split('_')
-                                  .map((str) =>
-                                      '${str[0].toUpperCase()}${str.substring(1)}')
-                                  .join(' '),
-                            );
-                            // return Row(
-                            //   mainAxisSize: MainAxisSize.min,
-                            //   children: <Widget>[
-                            //     Text('•',
-                            //         style: TextStyle(
-                            //             color: Colors.black87, fontSize: 16.0)),
-                            //     SizedBox(width: 5.0), // Add some space
-                            //     Text(
-                            //       insurance['name']
-                            //           .split('_')
-                            //           .map((str) =>
-                            //               '${str[0].toUpperCase()}${str.substring(1)}')
-                            //           .join(' '), // The name of the insurance
-                            //       style: TextStyle(
-                            //           color: Colors.black87, fontSize: 16.0),
-                            //     ),
-                            //   ],
-                            // );
-                          }).toList(),
-                        ),
-                        SizedBox(height: 25.0),
+                              ),
+                              SizedBox(height: 7.5),
+                              Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 8.0, // gap between adjacent chips
+                                runSpacing: 8.0, // gap between lines
+                                children: widget.physician['center']
+                                        ['insurances']
+                                    .map<Widget>((insurance) {
+                                  return pill(
+                                      insurance['name']
+                                          .split('_')
+                                          .map((str) =>
+                                              '${str[0].toUpperCase()}${str.substring(1)}')
+                                          .join(' '),
+                                      insurance['name'] ==
+                                          userData['insurance']['name']);
+                                }).toList(),
+                              ),
+                            ])),
+                        SizedBox(height: 10.0),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
