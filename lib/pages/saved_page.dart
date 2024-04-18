@@ -1,61 +1,38 @@
 import "package:flutter/material.dart";
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../components/match_card.dart';
-import 'login_bloc.dart';
+import '../models/app_data.dart';
 
 class SavedPage extends StatefulWidget {
-  const SavedPage({super.key});
+  const SavedPage({Key? key}) : super(key: key);
 
   @override
-  State<SavedPage> createState() => _SavedPageState();
+  _SavedPageState createState() => _SavedPageState();
 }
 
 class _SavedPageState extends State<SavedPage> {
-  List<Map<String, dynamic>> savedPhysicians = [];
-  late Future<void> savedPhysiciansFuture;
-
-  Future<void> getSavedPhysicians() async {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-    String cookie = loginBloc.state.props[0] as String;
-    final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current/saved-physician'),
-      headers: {'Cookie': 'session=.$cookie;'},
-    );
-    //print(response.body);
-    if (response.statusCode == 200) {
-      setState(() {
-        savedPhysicians =
-            List<Map<String, dynamic>>.from(json.decode(response.body));
-      });
-    } else {
-      throw Exception('Failed to load center data');
-    }
-  }
+  @override
+  bool get wantKeepAlive => context.watch<AppData>().savedPhysicians.isNotEmpty;
 
   @override
-  void initState() {
-    super.initState();
-    savedPhysiciansFuture = getSavedPhysicians();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<AppData>().getSavedPhysicians();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future.wait([
-        savedPhysiciansFuture,
-      ]),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
+    return Consumer<AppData>(
+      builder: (context, appData, child) {
+        if (appData.savedPhysicians.isEmpty && !appData.error) {
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(), // Loading spinner
             ),
           );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+        } else if (appData.error) {
+          return Text('Error: Failed to fetch saved physicians');
         } else {
           return Scaffold(
             body: Container(
@@ -66,7 +43,7 @@ class _SavedPageState extends State<SavedPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Saved Physicians',
@@ -76,19 +53,17 @@ class _SavedPageState extends State<SavedPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5.0),
-                    ...savedPhysicians.map((physician) {
+                    const SizedBox(height: 5.0),
+                    ...appData.savedPhysicians.map((physician) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: MatchCard(
                           physician: physician,
                           hasScore: false,
-                          hasSaved: true,
-                          isSaved: true,
-                          getSavedPhysicians: getSavedPhysicians,
+                          hasVisited: true,
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
