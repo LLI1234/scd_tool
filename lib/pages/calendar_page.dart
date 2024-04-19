@@ -55,7 +55,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             view: CalendarView.month,
                             selectionDecoration: BoxDecoration(
                               color: Colors.transparent,
-                              border: Border.all(color: Colors.red, width: 3),
+                              border: Border.all(color: Theme.of(context).primaryColor, width: 3),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(6)),
                               shape: BoxShape.rectangle,
@@ -123,6 +123,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SimpleDialog(
+                                        surfaceTintColor: Theme.of(context).colorScheme.background,
                                         title: Text(
                                             DateFormat('MMMM d, yyyy').format(
                                                 calendarTapDetails.date!),
@@ -207,10 +208,12 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Color _getMonthCellBackgroundColor(dateDetails) {
-    // if (!dateDetails.visibleDates.contains(dateDetails.date)) return Theme.of(context).colorScheme.background;
-    if (dateDetails.appointments.length == 0)
-      return Theme.of(context).colorScheme.onBackground;
-    return Theme.of(context).primaryColor;
+    if(dataSource.appointments != null){
+      for(var appointment in dataSource.appointments!){
+        if(appointment.date == dateDetails.date) return Theme.of(context).colorScheme.primary;
+      }
+    }
+    return Theme.of(context).colorScheme.onBackground;
   }
 
   Color _getMonthCellBorderColor(dateDetails, backgroundColor) {
@@ -271,9 +274,10 @@ class _SymptomsInputState extends State<SymptomsInput> {
     }).toList();
 
     Widget button =
-        ElevatedButton(onPressed: submitSymptoms, child: Text("Submit"));
+        TextButton(onPressed: submitSymptoms, child: Text("Submit"));
 
     return SimpleDialog(
+      surfaceTintColor: Theme.of(context).colorScheme.background,
       title: const Text("Are you experiencing any of the following?",
           style: TextStyle(
             fontSize: 16.0,
