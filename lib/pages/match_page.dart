@@ -71,10 +71,10 @@ class _MatchPageState extends State<MatchPage> {
           return Text('Error: ${snapshot.error}');
         } else {
           return Scaffold(
-            body: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              child: SingleChildScrollView(
+            body: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
