@@ -54,12 +54,11 @@ class _ProfilePageState extends State<ProfilePage> {
           return Text('Error: ${snapshot.error}');
         } else {
           return Scaffold(
-            body: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              height: double.infinity, //Max height
-              color: Theme.of(context).colorScheme.background,
-              child: SingleChildScrollView(
+            body: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 20.0),
+                color: Theme.of(context).colorScheme.background,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,21 +161,24 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            'Address',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
+                          Container(
+                              margin: EdgeInsets.only(right: 20),
+                              child: Text(
+                                'Address',
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                          Flexible(
+                              child: Text(
                             user['address'],
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
                             ),
-                          ),
+                          )),
                         ],
                       ),
                     ),

@@ -132,7 +132,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         placeholder: 'images/placeholder.png',
                                         // image: widget.physician['image_link'],
                                         image:
-                                            "https://hips.hearstapps.com/hmg-prod/images/portrait-of-a-happy-young-doctor-in-his-clinic-royalty-free-image-1661432441.jpg?crop=0.66698xw:1xh;center,top&resize=640:*",
+                                            "https://www.ucsfbenioffchildrens.org/-/media/project/ucsf/ucsf-bch/images/provider/card/dr-elliot-vichinsky-md-82485-320x320-2x.jpg?h=526&w=526&hash=EA6ACF344531E2CA7F4EC9614BA34C07",
                                         fit: BoxFit.cover,
                                         width: double.infinity,
                                         height: double.infinity,
