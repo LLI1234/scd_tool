@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:convert';
 
 import '../components/match_card.dart';
+import '../models/login_data.dart';
 
 class MatchPage extends StatefulWidget {
   const MatchPage({super.key});
@@ -19,7 +21,8 @@ class _MatchPageState extends State<MatchPage> {
 
   Future<void> getScoredPhysicians() async {
     final response =
-        await http.get(Uri.parse('http://localhost:5000/physician'));
+        await http.get(Uri.parse('http://127.0.0.1:5000/user/current/score-match'),
+        headers: {'Cookie': context.read<LoginData>().getCookie()});
     //print(response.body);
     if (response.statusCode == 200) {
       setState(() {

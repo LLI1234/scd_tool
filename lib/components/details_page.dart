@@ -70,6 +70,12 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   @override
+  void initState(){
+    context.read<AppData>().getUserInfo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget pill(label, [match]) {
       return Chip(
@@ -95,7 +101,6 @@ class _DetailsPageState extends State<DetailsPage> {
       ['Respectful', 'Direct'],
       ['Humble', 'Ambitious']
     ];
-    context.read<AppData>().getUserInfo();
     var userData = context.read<AppData>().userInfo;
     List<Widget> attrs = [];
 
@@ -127,7 +132,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: Column(children: [
                         Flexible(
                             child:
-                                widget.physician['center']['image_link'] != null
+                                widget.physician['image_link'] == null
                                     ? FadeInImage.assetNetwork(
                                         placeholder: 'images/placeholder.png',
                                         // image: widget.physician['image_link'],
@@ -296,7 +301,9 @@ class _DetailsPageState extends State<DetailsPage> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '5.0',
+                                        widget.physician["match_score"] != null ?
+                                        widget.physician["match_score"].toStringAsFixed(1) : "5.0"
+                                        ,
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme

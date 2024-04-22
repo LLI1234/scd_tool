@@ -99,7 +99,7 @@ class _MatchCardState extends State<MatchCard> {
                                 if (widget
                                     .hasScore) // If hasScore is true, render the score
                                   Text(
-                                    "5.0",
+                                    widget.physician["match_score"].toStringAsFixed(1),
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.primary,
