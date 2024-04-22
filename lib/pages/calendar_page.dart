@@ -208,10 +208,13 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Color _getMonthCellBackgroundColor(dateDetails) {
-    if(dataSource.appointments != null){
-      for(var appointment in dataSource.appointments!){
-        if(appointment.date == dateDetails.date) return Theme.of(context).colorScheme.primary;
-      }
+    // if(dataSource.appointments != null){
+    //   for(var appointment in dataSource.appointments!){
+    //     if(appointment.date == dateDetails.date) return Theme.of(context).colorScheme.primary;
+    //   }
+    // }
+    if(dateDetails.appointments.length == 1){
+      return Theme.of(context).colorScheme.primary;
     }
     return Theme.of(context).colorScheme.onBackground;
   }
