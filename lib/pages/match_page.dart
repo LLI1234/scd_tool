@@ -20,8 +20,8 @@ class _MatchPageState extends State<MatchPage> {
   late Future<void> similarPhysicianFuture;
 
   Future<void> getScoredPhysicians() async {
-    final response =
-        await http.get(Uri.parse('http://127.0.0.1:5000/user/current/score-match'),
+    final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/user/current/score-match'),
         headers: {'Cookie': context.read<LoginData>().getCookie()});
     //print(response.body);
     if (response.statusCode == 200) {
@@ -34,29 +34,27 @@ class _MatchPageState extends State<MatchPage> {
     }
   }
 
-  // Future<void> getSimilarPhysician() async {
-  //   final loginBloc = BlocProvider.of<LoginBloc>(context);
-  //   String cookie = loginBloc.state.props[0] as String;
+  Future<void> getSimilarPhysician() async {
+    final response = await http.get(
+      Uri.parse('http://localhost:5000/user/current/KNN-match'),
+      headers: {'Cookie': context.read<LoginData>().getCookie()},
+    );
 
-  //   final response = await http.get(
-  //     Uri.parse('http://localhost:5000/match/KNN'),
-  //     headers: {'Cookie': 'session=.$cookie;'},
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     setState(() {
-  //       similarPhysician = Map<String, dynamic>.from(json.decode(response.body));
-  //     });
-  //   } else {
-  //     throw Exception('Failed to load center data');
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      setState(() {
+        similarPhysician =
+            Map<String, dynamic>.from(json.decode(response.body));
+      });
+    } else {
+      throw Exception('Failed to load center data');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     scoredPhysiciansFuture = getScoredPhysicians();
-    similarPhysicianFuture = getScoredPhysicians();
+    similarPhysicianFuture = getSimilarPhysician();
   }
 
   @override
@@ -96,7 +94,7 @@ class _MatchPageState extends State<MatchPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: MatchCard(
-                        physician: scoredPhysicians[0],
+                        physician: similarPhysician,
                         hasScore: false,
                       ),
                     ),
