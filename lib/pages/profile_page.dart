@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -57,12 +58,21 @@ class _ProfilePageState extends State<ProfilePage> {
             body: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 20.0),
+                    vertical: 10.0, horizontal: 20.0),
                 color: Theme.of(context).colorScheme.background,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      IconButton(
+                        icon: Icon(Icons.logout),
+                        onPressed: () {
+                          context.read<LoginData>().logoutUser();
+                          Navigator.pushNamed(context, '/login');
+                        },
+                      ),
+                    ]),
                     Icon(
                       Icons.account_circle,
                       size: 120.0,
@@ -424,6 +434,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 20.0),
                   ],
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,6 +22,19 @@ class LoginData with ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('Failed to login');
+    }
+  }
+
+  Future<void> logoutUser() async {
+    final response = await http.delete(
+      Uri.parse('http://localhost:5000/session'),
+      headers: {'Cookie': _cookie},
+    );
+    if (response.statusCode == 200) {
+      _cookie = "";
+      notifyListeners();
+    } else {
+      throw Exception('Failed to logout');
     }
   }
 

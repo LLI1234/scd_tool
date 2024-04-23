@@ -45,6 +45,7 @@ dependencies:
   font_awesome_flutter: ^10.3.0
   form_field_validator: ^1.1.0
   syncfusion_flutter_calendar: ^25.1.39
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:
