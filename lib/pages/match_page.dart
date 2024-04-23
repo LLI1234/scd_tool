@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import '../components/match_card.dart';
 import '../models/login_data.dart';
+import '../models/app_data.dart';
 
 class MatchPage extends StatefulWidget {
   const MatchPage({super.key});
@@ -14,51 +15,21 @@ class MatchPage extends StatefulWidget {
 }
 
 class _MatchPageState extends State<MatchPage> {
-  List<Map<String, dynamic>> scoredPhysicians = [];
-  Map<String, dynamic> similarPhysician = {};
   late Future<void> scoredPhysiciansFuture;
   late Future<void> similarPhysicianFuture;
-
-  Future<void> getScoredPhysicians() async {
-    final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/user/current/score-match'),
-        headers: {'Cookie': context.read<LoginData>().getCookie()});
-    //print(response.body);
-    if (response.statusCode == 200) {
-      setState(() {
-        scoredPhysicians =
-            List<Map<String, dynamic>>.from(json.decode(response.body));
-      });
-    } else {
-      throw Exception('Failed to load center data');
-    }
-  }
-
-  Future<void> getSimilarPhysician() async {
-    final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current/KNN-match'),
-      headers: {'Cookie': context.read<LoginData>().getCookie()},
-    );
-
-    if (response.statusCode == 200) {
-      setState(() {
-        similarPhysician =
-            Map<String, dynamic>.from(json.decode(response.body));
-      });
-    } else {
-      throw Exception('Failed to load center data');
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    scoredPhysiciansFuture = getScoredPhysicians();
-    similarPhysicianFuture = getSimilarPhysician();
+    var appData = Provider.of<AppData>(context, listen: false);
+    scoredPhysiciansFuture = appData.fetchScoredPhysicians();
+    similarPhysicianFuture = appData.fetchSimilarPhysician();
   }
 
   @override
   Widget build(BuildContext context) {
+    var appData = Provider.of<AppData>(context);
+
     return FutureBuilder(
       future: Future.wait([scoredPhysiciansFuture, similarPhysicianFuture]),
       builder: (context, snapshot) {
@@ -94,7 +65,7 @@ class _MatchPageState extends State<MatchPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: MatchCard(
-                        physician: similarPhysician,
+                        physician: appData.similarPhysician,
                         hasScore: false,
                       ),
                     ),
@@ -110,7 +81,7 @@ class _MatchPageState extends State<MatchPage> {
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    ...scoredPhysicians.map((physician) {
+                    ...appData.scoredPhysicians.map((physician) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: MatchCard(
