@@ -355,99 +355,164 @@ Widget demographicDetails(){
             const Padding( 
               padding: EdgeInsets.only(top: 20.0), 
               child: Center(), 
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Ethnicity',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24.0,
+                ),
+              ),
             ), 
-            const Text(
-              'Ethnicity',
-              style: TextStyle(
-                fontSize: 24.0,
+            Container(
+              margin: const EdgeInsets.all(12.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedEthnicity,
+                  isExpanded: true,
+                  items: ethnicity.map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                  )).toList(),
+                  onChanged: (item) => setState(() => selectedEthnicity = item)
+                ),
+              ), 
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Education Level',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            DropdownButton<String>(
-              value: selectedEthnicity,
-              items: ethnicity.map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: const TextStyle(fontSize: 20))
-              )).toList(),
-              onChanged: (item) => setState(() => selectedEthnicity = item)
-            ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Text(
-              'Education Level',
-              style: TextStyle(
-                fontSize: 24.0,
+            
+            Container(
+              margin: const EdgeInsets.all(12.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedEducation,
+                  isExpanded: true,
+                  items: education.map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                  )).toList(),
+                  onChanged: (item) => setState(() => selectedEducation = item)
+                ),
               ),
             ),
-            DropdownButton<String>(
-              value: selectedEducation,
-              items: education.map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: const TextStyle(fontSize: 20))
-              )).toList(),
-              onChanged: (item) => setState(() => selectedEducation = item)
-            ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Text(
+           
+           Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
               'Insurance',
               style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
                 fontSize: 24.0,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            DropdownButton<String>(
-              value: selectedInsurance,
-              items: insurance.map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: const TextStyle(fontSize: 20))
-              )).toList(),
-              onChanged: (item) => setState(() => selectedInsurance = item)
-            ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Text(
-              'Income',
-              style: TextStyle(
-                fontSize: 24.0,
+           ),
+
+            Container(
+              margin: const EdgeInsets.all(12.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedInsurance,
+                  isExpanded: true,
+                  
+                  items: insurance.map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                  )).toList(),
+                  onChanged: (item) => setState(() => selectedInsurance = item)
+                ),
               ),
             ),
-            TextFormField(
-              controller: _incomeController,
-              decoration: const InputDecoration( 
-                hintText: 'Enter yearly income', 
-                errorStyle: TextStyle(fontSize: 18.0), 
-                border: OutlineInputBorder( 
-                  borderSide: BorderSide(color: Colors.red), 
-                  borderRadius: BorderRadius.all(Radius.circular(9.0))
+            
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Income',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(12.0), 
+              child: TextFormField(
+                controller: _incomeController,
+                decoration: const InputDecoration( 
+                  hintText: 'Enter yearly income', 
+                  errorStyle: TextStyle(fontSize: 18.0), 
+                  border: OutlineInputBorder( 
+                    borderSide: BorderSide(color: Colors.red), 
+                    borderRadius: BorderRadius.all(Radius.circular(9.0))
+                  )
+                ),
+              )
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'How much travel time are you willing to allocate?',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w500,
                 )
               ),
             ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Text(
-              'How much travel time are you willing to allocate?',
-              style: TextStyle(fontSize: 24.0)
+            
+            Padding(
+              padding: const EdgeInsets.all(12.0), 
+              child: TextFormField(
+                controller: _travelTimeController,
+                decoration: const InputDecoration( 
+                  hintText: 'Enter time in total minutes', 
+                  errorStyle: TextStyle(fontSize: 18.0), 
+                  border: OutlineInputBorder( 
+                    borderSide: BorderSide(color: Colors.red), 
+                    borderRadius: BorderRadius.all(Radius.circular(9.0))
+                  )
+                ),
+              ),
             ),
-            TextFormField(
-              controller: _travelTimeController,
-              decoration: const InputDecoration( 
-                hintText: 'Enter time in total minutes', 
-                errorStyle: TextStyle(fontSize: 18.0), 
-                border: OutlineInputBorder( 
-                  borderSide: BorderSide(color: Colors.red), 
-                  borderRadius: BorderRadius.all(Radius.circular(9.0))
+
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'What\s your preferred mode of transportation?',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w500
                 )
               ),
             ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Text(
-              'What\s your preferred mode of transportation?',
-              style: TextStyle(fontSize: 24.0)
+            
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: DropdownButtonHideUnderline(child: DropdownButton<String>(
+                isExpanded: true,
+                value: selectedTransportation,
+                items: transportation.map((item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                )).toList(),
+                onChanged: (item) => setState(() => selectedTransportation = item)
+              )), 
             ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            DropdownButton<String>(
-              value: selectedTransportation,
-              items: transportation.map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: const TextStyle(fontSize: 20))
-              )).toList(),
-              onChanged: (item) => setState(() => selectedTransportation = item)
-            ),
+            
             Center( 
               child: Padding( 
                 padding: const EdgeInsets.all(18.0), 
@@ -455,7 +520,7 @@ Widget demographicDetails(){
                   child: ElevatedButton( 
                     child: const Text( 
                       'Next page', 
-                      style: TextStyle(color: Colors.blue, fontSize: 22), 
+                      style: TextStyle(color: Colors.red, fontSize: 22), 
                     ), 
                     onPressed: (){
                       if(demographicFormKey.currentState?.validate() ?? false){
@@ -518,7 +583,7 @@ Widget basicDetails(){
                 controller: _firstNameController, 
                 validator: MultiValidator([RequiredValidator(errorText: 'Enter first name')]), 
                 decoration: const InputDecoration( 
-                  hintText: 'Enter first Name', 
+                  hintText: 'Enter first Name',
                   labelText: 'First name', 
                   prefixIcon: Icon( 
                     Icons.person, 
@@ -533,7 +598,7 @@ Widget basicDetails(){
               ), 
             ),
             Padding( 
-              padding: const EdgeInsets.all(8.0), 
+              padding: const EdgeInsets.all(12.0), 
               child: TextFormField( 
                 controller: _lastNameController,
                 validator: MultiValidator([RequiredValidator(errorText: 'Enter last name')]), 
@@ -593,7 +658,7 @@ Widget basicDetails(){
               ), 
             ),  
             Padding( 
-              padding: const EdgeInsets.all(8.0), 
+              padding: const EdgeInsets.all(12.0), 
               child: TextFormField( 
                 controller: _emailController,
                 validator: MultiValidator([ 
@@ -616,7 +681,7 @@ Widget basicDetails(){
               ), 
             ),
             Padding( 
-              padding: const EdgeInsets.all(8.0), 
+              padding: const EdgeInsets.all(12.0), 
               child: TextFormField( 
                 controller: _passwordController,
                 validator: MultiValidator([RequiredValidator(errorText: 'Enter password')]), 
@@ -636,7 +701,7 @@ Widget basicDetails(){
               ), 
             ),  
             Padding( 
-              padding: const EdgeInsets.all(8.0), 
+              padding: const EdgeInsets.all(12.0), 
               child: TextFormField( 
                 controller: _phoneNumberController,
                 validator: MultiValidator([RequiredValidator(errorText: 'Enter mobile number')]), 
@@ -661,7 +726,7 @@ Widget basicDetails(){
                   child: ElevatedButton( 
                     child: const Text( 
                       'Next page', 
-                      style: TextStyle(color: Colors.blue, fontSize: 22), 
+                      style: TextStyle(color: Colors.red, fontSize: 22), 
                     ), 
                     onPressed: (){
                       if(basicFormKey.currentState?.validate() ?? false){
