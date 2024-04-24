@@ -46,6 +46,7 @@ dependencies:
   form_field_validator: ^1.1.0
   syncfusion_flutter_calendar: ^25.1.39
   flutter_rating_bar: ^4.0.0
+  syncfusion_flutter_datepicker: ^25.1.38
 
 dev_dependencies:
   flutter_test:
