@@ -20,15 +20,22 @@ class _LoginScreenState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Screen'),
-        automaticallyImplyLeading: false,
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(50.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              "Welcome Back",
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              "Sign in to continue",
+            ),
+            const SizedBox(height: 16),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               controller: emailController,
@@ -48,42 +55,61 @@ class _LoginScreenState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  await context.read<LoginData>().loginUser(
-                        emailController.text,
-                        passwordController.text,
-                      );
-                  if (mounted) {
-                    Navigator.of(context).pushNamed(RouteManager.main);
+            Container(
+              width: 300,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await context.read<LoginData>().loginUser(
+                          emailController.text,
+                          passwordController.text,
+                        );
+                    if (mounted) {
+                      Navigator.of(context).pushNamed(RouteManager.main);
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(SnackBar(
+                          content: Text(e.toString()),
+                          duration: const Duration(seconds: 3),
+                        ));
+                    }
                   }
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBar(
-                        content: Text(e.toString()),
-                        duration: const Duration(seconds: 3),
-                      ));
-                  }
-                }
-              },
-              child: const Text('Login'),
-            ),
-            RichText(
-              text: TextSpan(children: <TextSpan>[
-                TextSpan(
-                  text: 'Don\'t have an account? Click here to sign up.',
-                  style: TextStyle(color: Colors.blue),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterPage())),
+                },
+                child: const Text('Login'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
-              ]),
+              ),
             ),
+            const SizedBox(height: 16),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Don't have an account? ",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface),
+                  ),
+                  TextSpan(
+                    text: 'Click here to sign up.',
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterPage(),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

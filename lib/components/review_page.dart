@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:scd_tool/components/bulleted_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewPage extends StatefulWidget {
   final Map<String, dynamic> physician;
@@ -17,6 +18,8 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
+  double _rating = 0.0;
+
   void _launchURL() async {
     final url = Uri.parse(widget.physician['center']['website']);
     if (await canLaunchUrl(url)) {
@@ -44,7 +47,15 @@ class _ReviewPageState extends State<ReviewPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 60.0),
+                    SizedBox(height: 48.0),
+                    Text("How was your visit with",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w700,
+                        )),
+                    SizedBox(height: 10),
                     Text(
                       widget.physician['first_name'] +
                           ' ' +
@@ -56,30 +67,72 @@ class _ReviewPageState extends State<ReviewPage> {
                           fontWeight: FontWeight.w500,
                           height: 1.0),
                     ),
+                    SizedBox(height: 6),
                     Text(
-                      widget.physician['title'],
+                      widget.physician['title'] +
+                          ', ' +
+                          widget.physician['center']['name'],
                       textAlign: TextAlign.center, // Add t
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16.0,
                       ),
                     ),
+                    SizedBox(height: 30.0),
                     Text(
-                      widget.physician['center']['name'],
-                      textAlign: TextAlign.center, // Add t
+                      'Overall experience',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RatingBar.builder(
+                          initialRating: _rating,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              _rating = rating;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
                     Text(
-                      widget.physician['center']['address'],
-                      textAlign: TextAlign.center, // Add t
+                      'Care to share more?',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(height: 15.0),
+                    SizedBox(height: 10.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 18.0),
+                      child: TextField(
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText:
+                              'How was your overall experience? What did you like or dislike?',
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
