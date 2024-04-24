@@ -302,7 +302,7 @@ Widget personalDetails(){
                   child: ElevatedButton( 
                     child: const Text( 
                       'Register', 
-                      style: TextStyle(color: Colors.blue, fontSize: 22), 
+                      style: TextStyle(color: Colors.red, fontSize: 22), 
                     ), 
                     onPressed: (){
                       if(personalFormKey.currentState?.validate() ?? false){
