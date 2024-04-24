@@ -1,15 +1,25 @@
 import "package:flutter/material.dart";
 import 'package:scd_tool/components/bulleted_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../pages/login_bloc.dart';
 
 class DetailsPage extends StatefulWidget {
   final Map<String, dynamic> physician;
-  bool selected;
+  bool isSaved;
+  final Function getSavedPhysicians;
+
+  static void defaultFunction() {
+    // This is an empty function that does nothing.
+  }
 
   DetailsPage({
     super.key,
     required this.physician,
-    this.selected = false,
+    this.isSaved = false,
+    this.getSavedPhysicians = defaultFunction,
   });
 
   @override
@@ -23,6 +33,44 @@ class _DetailsPageState extends State<DetailsPage> {
       await launchUrl(url);
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> savePhysician() async {
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    String cookie = loginBloc.state.props[0] as String;
+    final response = await http.put(
+      Uri.parse(
+          'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
+      headers: {'Cookie': 'session=.$cookie;'},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON.
+      print('Request successful');
+      widget.getSavedPhysicians();
+    } else {
+      // If the server returns an unsuccessful response code, throw an exception.
+      throw Exception('Failed to save physician');
+    }
+  }
+
+  Future<void> unsavePhysician() async {
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    String cookie = loginBloc.state.props[0] as String;
+    final response = await http.delete(
+      Uri.parse(
+          'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
+      headers: {'Cookie': 'session=.$cookie;'},
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON.
+      print('Request successful');
+      widget.getSavedPhysicians();
+    } else {
+      // If the server returns an unsuccessful response code, throw an exception.
+      throw Exception('Failed to unsave physician');
     }
   }
 
@@ -76,12 +124,17 @@ class _DetailsPageState extends State<DetailsPage> {
                                   height: 1.0),
                             ),
                             InputChip(
-                              label: Text(widget.selected ? 'Saved' : 'Save'),
-                              selected: widget.selected,
+                              label: Text(widget.isSaved ? 'Saved' : 'Save'),
+                              selected: widget.isSaved,
                               onSelected: (bool selected) {
                                 setState(() {
-                                  widget.selected = !widget.selected;
+                                  widget.isSaved = !widget.isSaved;
                                 });
+                                if (widget.isSaved) {
+                                  savePhysician();
+                                } else {
+                                  unsavePhysician();
+                                }
                               },
                               labelStyle: TextStyle(
                                   color: Colors.white, fontSize: 12.0),

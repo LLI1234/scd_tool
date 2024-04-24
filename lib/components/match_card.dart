@@ -2,20 +2,29 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "details_page.dart";
+import "review_page.dart";
 
 class MatchCard extends StatefulWidget {
   final Map<String, dynamic> physician;
   final bool hasScore;
   final bool hasSaved;
-  bool selected;
+  bool isSaved;
+  bool isVisited;
+  final Function getSavedPhysicians;
 
-  MatchCard({
-    Key? key,
-    required this.physician,
-    this.hasScore = true,
-    this.hasSaved = false,
-    this.selected = false,
-  }) : super(key: key);
+  static void defaultFunction() {
+    // This is an empty function that does nothing.
+  }
+
+  MatchCard(
+      {Key? key,
+      required this.physician,
+      this.hasScore = true,
+      this.hasSaved = false,
+      this.isSaved = false,
+      this.isVisited = false,
+      this.getSavedPhysicians = defaultFunction})
+      : super(key: key);
 
   @override
   State<MatchCard> createState() => _MatchCardState();
@@ -29,7 +38,11 @@ class _MatchCardState extends State<MatchCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DetailsPage(physician: widget.physician)),
+              builder: (context) => DetailsPage(
+                    physician: widget.physician,
+                    isSaved: widget.isSaved,
+                    getSavedPhysicians: widget.getSavedPhysicians,
+                  )),
         );
       },
       child: Center(
@@ -109,81 +122,84 @@ class _MatchCardState extends State<MatchCard> {
                                 if (widget
                                     .hasSaved) // If hasSaved is true, render the saved icon
                                   InputChip(
-                                    label: Text(widget.selected
+                                    label: Text(widget.isVisited
                                         ? 'Visited'
                                         : 'Visited?'),
-                                    selected: widget.selected,
+                                    selected: widget.isVisited,
                                     onSelected: (bool selected) {
                                       setState(() {
-                                        if (!widget.selected && selected) {
+                                        if (!widget.isVisited && selected) {
                                           Future.delayed(
                                               Duration(milliseconds: 500), () {
-                                            showGeneralDialog(
+                                            showDialog(
                                               context: context,
-                                              barrierDismissible: true,
-                                              barrierLabel:
-                                                  MaterialLocalizations.of(
-                                                          context)
-                                                      .modalBarrierDismissLabel,
-                                              barrierColor: Colors.black45,
-                                              transitionDuration:
-                                                  const Duration(
-                                                      milliseconds: 500),
-                                              pageBuilder:
-                                                  (BuildContext buildContext,
-                                                      Animation animation,
-                                                      Animation
-                                                          secondaryAnimation) {
-                                                return Center(
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width -
-                                                            10,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height -
-                                                            80,
-                                                    padding: EdgeInsets.all(20),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Center(
+                                                    child: Text(
+                                                      'Leave a review for this physician?',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
-                                                    child: Column(
+                                                  ),
+                                                  actions: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
-                                                        Text('Review'),
-                                                        Text(
-                                                            'Please leave a review for the physician'),
-                                                        ElevatedButton(
+                                                        TextButton(
+                                                          child: Text('SKIP'),
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
                                                           },
-                                                          child: Text("OK"),
+                                                        ),
+                                                        ElevatedButton(
+                                                          child: Text('OK',
+                                                              style: TextStyle(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onPrimary)),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      ReviewPage(
+                                                                          physician:
+                                                                              widget.physician)),
+                                                            );
+                                                          },
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty.all<
+                                                                    Color>(Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              transitionBuilder: (context,
-                                                  animation,
-                                                  secondaryAnimation,
-                                                  child) {
-                                                return FadeTransition(
-                                                  opacity: animation,
-                                                  child: child,
+                                                  ],
                                                 );
                                               },
                                             );
                                           });
                                         }
-                                        widget.selected = selected;
+                                        widget.isVisited = selected;
                                       });
                                     },
                                     labelStyle: TextStyle(
