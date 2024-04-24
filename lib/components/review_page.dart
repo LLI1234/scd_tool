@@ -45,7 +45,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 48.0),
                     Text("How was your visit with",
@@ -131,6 +131,19 @@ class _ReviewPageState extends State<ReviewPage> {
                           hintText:
                               'How was your overall experience? What did you like or dislike?',
                         ),
+                      ),
+                    ),
+                    SizedBox(height: 20.0), // Add some space before the button
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary, // background color
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onPrimary, // text color
                       ),
                     ),
                   ],

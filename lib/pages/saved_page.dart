@@ -12,8 +12,13 @@ class SavedPage extends StatefulWidget {
 }
 
 class _SavedPageState extends State<SavedPage> {
+  Future? savedPhysiciansFuture;
+
   @override
-  bool get wantKeepAlive => context.watch<AppData>().savedPhysicians.isNotEmpty;
+  void initState() {
+    super.initState();
+    savedPhysiciansFuture = context.read<AppData>().getSavedPhysicians();
+  }
 
   @override
   void didChangeDependencies() {
@@ -23,51 +28,63 @@ class _SavedPageState extends State<SavedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppData>(
-      builder: (context, appData, child) {
-        if (appData.savedPhysicians.isEmpty && !appData.error) {
+    return FutureBuilder(
+      future: savedPhysiciansFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(), // Loading spinner
             ),
           );
-        } else if (appData.error) {
+        } else if (snapshot.hasError) {
           return Text('Error: Failed to fetch saved physicians');
         } else {
-          return Scaffold(
-            body: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Saved Physicians',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
+          return Consumer<AppData>(
+            builder: (context, appData, child) {
+              return Scaffold(
+                body: Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 20.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Saved Physicians',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 5.0),
+                        if (appData.savedPhysicians.isEmpty)
+                          Container(
+                              height: 500,
+                              child: Center(
+                                  child: const Text('No saved physicians')))
+                        else
+                          ...appData.savedPhysicians.map((physician) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: MatchCard(
+                                physician: physician,
+                                hasScore: false,
+                                hasVisited: true,
+                              ),
+                            );
+                          }).toList(),
+                      ],
                     ),
-                    const SizedBox(height: 5.0),
-                    ...appData.savedPhysicians.map((physician) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: MatchCard(
-                          physician: physician,
-                          hasScore: false,
-                          hasVisited: true,
-                        ),
-                      );
-                    }),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         }
       },
