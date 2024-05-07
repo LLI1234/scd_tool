@@ -8,7 +8,7 @@ class LoginData with ChangeNotifier {
   String _cookie = "";
 
   Future<void> loginUser(String email, String password) async {
-    final response = await http.post(Uri.parse('http://localhost:5000/session'),
+    final response = await http.post(Uri.parse('https://scd-tool-api.onrender.com/session'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -27,7 +27,7 @@ class LoginData with ChangeNotifier {
 
   Future<void> logoutUser() async {
     final response = await http.delete(
-      Uri.parse('http://localhost:5000/session'),
+      Uri.parse('https://scd-tool-api.onrender.com/session'),
       headers: {'Cookie': _cookie},
     );
     if (response.statusCode == 200) {

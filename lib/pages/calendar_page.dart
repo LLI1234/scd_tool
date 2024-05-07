@@ -305,7 +305,7 @@ class _SymptomsInputState extends State<SymptomsInput> {
   Future<void> submitSymptoms() async {
     String cookie = context.read<LoginData>().getCookie();
     final response = await http.put(
-        Uri.parse('http://localhost:5000/user/current/daily-symptoms'),
+        Uri.parse('https://scd-tool-api.onrender.com/user/current/daily-symptoms'),
         headers: {'Cookie': cookie, 'Content-Type': 'application/json'},
         body: jsonEncode(states));
 
