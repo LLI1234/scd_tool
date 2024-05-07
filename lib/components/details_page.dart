@@ -33,7 +33,7 @@ class _DetailsPageState extends State<DetailsPage> {
     String cookie = context.read<LoginData>().getCookie();
     final response = await http.put(
       Uri.parse(
-          'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
+          'https://scd-tool-api.onrender.com/user/current/saved-physician/${widget.physician["id"]}'),
       headers: {'Cookie': cookie},
     );
 
@@ -53,7 +53,7 @@ class _DetailsPageState extends State<DetailsPage> {
     String cookie = context.read<LoginData>().getCookie();
     final response = await http.delete(
       Uri.parse(
-          'http://localhost:5000/user/current/saved-physician/${widget.physician["id"]}'),
+          'https://scd-tool-api.onrender.com/user/current/saved-physician/${widget.physician["id"]}'),
       headers: {'Cookie': cookie},
     );
 

@@ -19,7 +19,7 @@ class AppData with ChangeNotifier {
   Future<void> getUserInfo() async {
     final cookie = loginData.getCookie();
     final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current'),
+      Uri.parse('https://scd-tool-api.onrender.com/user/current'),
       headers: {'Cookie': cookie},
     );
     //print(response.body);
@@ -36,7 +36,7 @@ class AppData with ChangeNotifier {
     final cookie = loginData.getCookie();
     if (!_isFetched) {
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/user/current/score-match'),
+        Uri.parse('https://scd-tool-api.onrender.com/user/current/score-match'),
         headers: {'Cookie': cookie},
       );
 
@@ -56,7 +56,7 @@ class AppData with ChangeNotifier {
     final cookie = loginData.getCookie();
     if (!_isFetched) {
       final response = await http.get(
-        Uri.parse('http://localhost:5000/user/current/KNN-match'),
+        Uri.parse('https://scd-tool-api.onrender.com/user/current/KNN-match'),
         headers: {'Cookie': cookie},
       );
 
@@ -75,7 +75,7 @@ class AppData with ChangeNotifier {
   Future<void> getSavedPhysicians() async {
     final cookie = loginData.getCookie();
     final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current/saved-physician'),
+      Uri.parse('https://scd-tool-api.onrender.com/user/current/saved-physician'),
       headers: {'Cookie': cookie},
     );
     //print(response.body);
@@ -92,7 +92,7 @@ class AppData with ChangeNotifier {
   Future<void> getDailySymptoms() async {
     final cookie = loginData.getCookie();
     final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current/daily-symptoms'),
+      Uri.parse('https://scd-tool-api.onrender.com/user/current/daily-symptoms'),
       headers: {'Cookie': cookie},
     );
     //print(response.body);

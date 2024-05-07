@@ -21,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> fetchUser() async {
     String cookie = context.read<LoginData>().getCookie();
     final response = await http.get(
-      Uri.parse('http://localhost:5000/user/current'),
+      Uri.parse('https://scd-tool-api.onrender.com/user/current'),
       headers: {'Cookie': cookie},
     );
 
