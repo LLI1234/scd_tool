@@ -226,7 +226,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       Text(
                                         widget.physician['title'],
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -234,7 +234,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       Text(
                                         widget.physician['center']['address'],
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                         ),
                                       ),
                                       SizedBox(height: 10.0),
@@ -364,7 +364,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         widget.physician['center']['name'],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -451,7 +451,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       Text(
                                         "Insurances Accepted",
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600,
                                         ),
