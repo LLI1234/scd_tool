@@ -8,6 +8,7 @@ class AppData with ChangeNotifier {
   Map<String, dynamic> userInfo = {};
   List<Map<String, dynamic>> savedPhysicians = [];
   List<Map<String, dynamic>> dailySymptoms = [];
+  bool dailySymptomsLoaded = false;
   bool error = false;
 
   List<Map<String, dynamic>> scoredPhysicians = [];
@@ -90,12 +91,14 @@ class AppData with ChangeNotifier {
   }
 
   Future<void> getDailySymptoms() async {
+    dailySymptomsLoaded = false;
     final cookie = loginData.getCookie();
     final response = await http.get(
       Uri.parse('https://scd-tool-api.onrender.com/user/current/daily-symptoms'),
       headers: {'Cookie': cookie},
     );
     //print(response.body);
+    dailySymptomsLoaded = true;
     if (response.statusCode == 200) {
       dailySymptoms =
           List<Map<String, dynamic>>.from(json.decode(response.body));

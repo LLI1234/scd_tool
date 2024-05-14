@@ -34,7 +34,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppData>(builder: (context, appData, child) {
-      if (appData.dailySymptoms.isEmpty && !appData.error) {
+      if (!appData.dailySymptomsLoaded && !appData.error) {
         return const Scaffold(
           body: Center(
             child: CircularProgressIndicator(), // Loading spinner
