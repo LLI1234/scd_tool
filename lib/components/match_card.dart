@@ -130,7 +130,7 @@ class _MatchCardState extends State<MatchCard> {
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
-                                                        color: Colors.black,
+                                                        color: Colors.black87,
                                                         fontSize: 18.0,
                                                         fontWeight:
                                                             FontWeight.w500,
@@ -205,7 +205,7 @@ class _MatchCardState extends State<MatchCard> {
                             Text(
                               widget.physician['title'],
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.black87,
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w500,
                               ),

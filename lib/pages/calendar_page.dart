@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:scd_tool/components/greeting_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -21,12 +22,13 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   @override
-  bool get wantKeepAlive => context.watch<AppData>().dailySymptoms.isNotEmpty;
+  bool get wantKeepAlive => !context.watch<AppData>().dailySymptomsLoaded;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.read<AppData>().getDailySymptoms();
+    context.read<AppData>().getUserInfo();
   }
 
   MeetingDataSource dataSource = MeetingDataSource([]);
@@ -45,157 +47,162 @@ class _CalendarPageState extends State<CalendarPage> {
       } else {
         dataSource = MeetingDataSource(_getDataSource(appData.dailySymptoms));
         return Scaffold(
-            body: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: SfCalendar(
-                            view: CalendarView.month,
-                            selectionDecoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: Border.all(color: Theme.of(context).primaryColor, width: 3),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
-                              shape: BoxShape.rectangle,
-                            ),
-                            todayHighlightColor: Colors.red,
-                            headerHeight: 30,
-                            headerStyle: CalendarHeaderStyle(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background,
-                                textStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700)),
-                            onTap: (calendarTapDetails) {
-                              List<Widget> body = [];
-                              if (calendarTapDetails.appointments!.isEmpty) {
-                                return;
-                                // body.add(const SizedBox(
-                                //     height: 100,
-                                //     child: Center(
-                                //         child: Text("No Symptoms Recorded"))));
-                              } else {
-                                var symptoms =
-                                    calendarTapDetails.appointments?.last.content;
+            body: Column(
+          children: [
+            GreetingWidget(
+                appData.userInfo['first_name'], Theme.of(context).primaryColor,
+                () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SymptomsInput(dataSource: dataSource);
+                  });
+            }),
+            Expanded(
+                child: Container(
+                    margin: EdgeInsets.all(15),
+                    // padding: EdgeInsets.all(10),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(10),
+                    //     border: Border.all(
+                    //     color: Colors.black87,
+                    //     width: 2
+                    //   ),
+                    //   color: Colors.white
+                    // ),
+                    child: SfCalendar(
+                        view: CalendarView.month,
+                        selectionDecoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor, width: 3),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(6)),
+                          shape: BoxShape.rectangle,
+                        ),
+                        todayHighlightColor: Theme.of(context).primaryColor,
+                        // headerHeight: 30,
+                        headerStyle: CalendarHeaderStyle(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700)),
+                        onTap: (calendarTapDetails) {
+                          List<Widget> body = [];
+                          if (calendarTapDetails.appointments!.isEmpty) {
+                            return;
+                            // body.add(const SizedBox(
+                            //     height: 100,
+                            //     child: Center(
+                            //         child: Text("No Symptoms Recorded"))));
+                          } else {
+                            var symptoms =
+                                calendarTapDetails.appointments?.last.content;
 
-                                List<Widget> chips = [];
+                            List<Widget> chips = [];
 
-                                for (var symptom in symptoms.entries) {
-                                  chips.add(InputChip(
-                                      selectedColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      checkmarkColor: Colors.white,
-                                      label: Text(
-                                          symptom.key
-                                              .replaceAll(RegExp(r'_'), ' '),
-                                          style: TextStyle(
-                                              color: symptom.value.toString() != "null" &&
-                                                      symptom.value.toString() !=
-                                                          "false"
-                                                  ? Colors.white
-                                                  : Theme.of(context)
-                                                      .colorScheme
-                                                      .onBackground)),
-                                      onSelected: (value) {},
-                                      selected:
-                                          symptom.value.toString() != "null" &&
-                                              symptom.value.toString() !=
-                                                  "false") as Widget);
-                                }
+                            for (var symptom in symptoms.entries) {
+                              chips.add(InputChip(
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  checkmarkColor: Colors.white,
+                                  label: Text(
+                                      symptom.key.replaceAll(RegExp(r'_'), ' '),
+                                      style: TextStyle(
+                                          color: symptom.value.toString() !=
+                                                      "null" &&
+                                                  symptom.value.toString() !=
+                                                      "false"
+                                              ? Colors.white
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground)),
+                                  onSelected: (value) {},
+                                  selected:
+                                      symptom.value.toString() != "null" &&
+                                          symptom.value.toString() !=
+                                              "false") as Widget);
+                            }
 
-                                body.add(Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 5),
-                                    child: Center(
-                                        child: Wrap(
-                                      alignment: WrapAlignment.center,
-                                      spacing: 5.0,
-                                      runSpacing: 5.0,
-                                      children: chips,
-                                    ))));
-                                print(symptoms);
-                              }
-
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return SimpleDialog(
-                                        surfaceTintColor: Theme.of(context).colorScheme.background,
-                                        title: Text(
-                                            DateFormat('MMMM d, yyyy').format(
-                                                calendarTapDetails.date!),
-                                            style: const TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w700,
-                                            )),
-                                        // surfaceTintColor: Theme.of(context).colorScheme.background,
-                                        children: body);
-                                  });
-                            },
-                            monthCellBuilder: (BuildContext buildContext,
-                                MonthCellDetails details) {
-                              final Color backgroundColor =
-                                  _getMonthCellBackgroundColor(details);
-                              final Color borderColor =
-                                  _getMonthCellBorderColor(
-                                      details, backgroundColor);
-                              final Color defaultColor =
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.black54
-                                      : Colors.white;
-                              return Container(
-                                decoration: BoxDecoration(
-                                    color: backgroundColor,
-                                    border: Border.all(
-                                        color: borderColor, width: 3),
-                                    borderRadius: BorderRadius.circular(5)),
-                                margin: const EdgeInsets.all(2),
+                            body.add(Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
                                 child: Center(
-                                  child: Text(
-                                    details.date.day.toString(),
-                                    style: TextStyle(
-                                        color:
-                                            _getCellTextColor(backgroundColor),
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              );
-                            },
-                            dataSource: dataSource,
-                            // by default the month appointment display mode set as Indicator, we can
-                            // change the display mode as appointment using the appointment display
-                            // mode property
-                            monthViewSettings: const MonthViewSettings(
-                              appointmentDisplayMode:
-                                  MonthAppointmentDisplayMode.none,
-                              showAgenda: false,
-                              showTrailingAndLeadingDates: false,
-                            ))),
-                    Container(
-                        padding: EdgeInsets.all(20),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return SymptomsInput(dataSource: dataSource);
-                                  });
-                            },
-                            child: Text("How are you feeling today?")))
-                  ],
-                )));
+                                    child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  spacing: 5.0,
+                                  runSpacing: 5.0,
+                                  children: chips,
+                                ))));
+                            print(symptoms);
+                          }
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SimpleDialog(
+                                    surfaceTintColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    title: Text(
+                                        DateFormat('MMMM d, yyyy')
+                                            .format(calendarTapDetails.date!),
+                                        style: const TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                        )),
+                                    // surfaceTintColor: Theme.of(context).colorScheme.background,
+                                    children: body);
+                              });
+                        },
+                        monthCellBuilder: (BuildContext buildContext,
+                            MonthCellDetails details) {
+                          final Color backgroundColor =
+                              _getMonthCellBackgroundColor(details);
+                          final Color borderColor = _getMonthCellBorderColor(
+                              details, backgroundColor);
+                          final Color defaultColor =
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.black54
+                                  : Colors.white;
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                border:
+                                    Border.all(color: borderColor, width: 3),
+                                borderRadius: BorderRadius.circular(5)),
+                            margin: const EdgeInsets.all(2),
+                            child: Center(
+                              child: Text(
+                                details.date.day.toString(),
+                                style: TextStyle(
+                                    color: _getCellTextColor(backgroundColor),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          );
+                        },
+                        dataSource: dataSource,
+                        // by default the month appointment display mode set as Indicator, we can
+                        // change the display mode as appointment using the appointment display
+                        // mode property
+                        monthViewSettings: const MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.none,
+                          showAgenda: false,
+                          showTrailingAndLeadingDates: false,
+                        )))),
+          ],
+        ));
       }
     });
   }
 
   List<DailyReport> _getDataSource(List<Map<String, dynamic>> dailySymptoms) {
-    List<DailyReport> reports =
-        dailySymptoms.map((report) {
+    List<DailyReport> reports = dailySymptoms.map((report) {
       var date = DateTime.parse(report["date"]);
       Map<String, dynamic> content = Map.from(report);
 
@@ -213,7 +220,7 @@ class _CalendarPageState extends State<CalendarPage> {
     //     if(appointment.date == dateDetails.date) return Theme.of(context).colorScheme.primary;
     //   }
     // }
-    if(dateDetails.appointments.length == 1){
+    if (dateDetails.appointments.length == 1) {
       return Theme.of(context).colorScheme.primary;
     }
     return Theme.of(context).colorScheme.onBackground;
@@ -305,7 +312,8 @@ class _SymptomsInputState extends State<SymptomsInput> {
   Future<void> submitSymptoms() async {
     String cookie = context.read<LoginData>().getCookie();
     final response = await http.put(
-        Uri.parse('https://scd-tool-api.onrender.com/user/current/daily-symptoms'),
+        Uri.parse(
+            'https://scd-tool-api.onrender.com/user/current/daily-symptoms'),
         headers: {'Cookie': cookie, 'Content-Type': 'application/json'},
         body: jsonEncode(states));
 
