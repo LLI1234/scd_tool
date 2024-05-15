@@ -127,7 +127,8 @@ class _DetailsPageState extends State<DetailsPage> {
           }
         }
 
-        return SafeArea(child: Scaffold(
+        return SafeArea(
+            child: Scaffold(
           body: Center(
             child: Container(
               width: double.infinity,
@@ -141,12 +142,11 @@ class _DetailsPageState extends State<DetailsPage> {
                           height: MediaQuery.of(context).size.height,
                           child: Column(children: [
                             Flexible(
-                                child: widget.physician['image_link'] == null
+                                child: widget.physician['image_link'] != null
                                     ? FadeInImage.assetNetwork(
                                         placeholder: 'images/placeholder.png',
-                                        // image: widget.physician['image_link'],
-                                        image:
-                                            "https://www.ucsfbenioffchildrens.org/-/media/project/ucsf/ucsf-bch/images/provider/card/dr-elliot-vichinsky-md-82485-320x320-2x.jpg?h=526&w=526&hash=EA6ACF344531E2CA7F4EC9614BA34C07",
+                                        image: widget.physician['image_link'],
+                                        //image:"https://www.ucsfbenioffchildrens.org/-/media/project/ucsf/ucsf-bch/images/provider/card/dr-elliot-vichinsky-md-82485-320x320-2x.jpg?h=526&w=526&hash=EA6ACF344531E2CA7F4EC9614BA34C07",
                                         fit: BoxFit.cover,
                                         width: double.infinity,
                                         height: double.infinity,
@@ -154,8 +154,10 @@ class _DetailsPageState extends State<DetailsPage> {
                                       )
                                     : Image.asset(
                                         'images/placeholder.png',
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.fill,
                                         width: double.infinity,
+                                        height: double.infinity,
+                                        alignment: Alignment.topCenter,
                                       )),
                             Padding(
                                 padding: EdgeInsets.symmetric(
