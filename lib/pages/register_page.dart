@@ -176,28 +176,29 @@ class _RegisterPageState extends State<RegisterPage> {
       formatted_insurance = 'unitedHealth_group';
     }
 
-    final response = await http.post(Uri.parse('http://127.0.0.1:5000/user'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "email": email,
-          "password": password,
-          "first_name": first_name,
-          "last_name": last_name,
-          "DoB": dob,
-          "phone_number": phone_number,
-          "address": address,
-          "ethnicity": formatted_ethnicity,
-          "education": formatted_education,
-          "insurance": formatted_insurance,
-          "income": income,
-          "max_travel_time": max_travel_time,
-          "preferred_transportation": preferred_transportation,
-          "attribute1": attribute1,
-          "attribute2": attribute2,
-          "attribute3": attribute3,
-          "attribute4": attribute4,
-          "attribute5": attribute5,
-        }));
+    final response =
+        await http.post(Uri.parse('http://scd-tool-api.onrender.com/user'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "email": email,
+              "password": password,
+              "first_name": first_name,
+              "last_name": last_name,
+              "DoB": dob,
+              "phone_number": phone_number,
+              "address": address,
+              "ethnicity": formatted_ethnicity,
+              "education": formatted_education,
+              "insurance": formatted_insurance,
+              "income": income,
+              "max_travel_time": max_travel_time,
+              "preferred_transportation": preferred_transportation,
+              "attribute1": attribute1,
+              "attribute2": attribute2,
+              "attribute3": attribute3,
+              "attribute4": attribute4,
+              "attribute5": attribute5,
+            }));
 
     if (response.statusCode == 201) {
       Navigator.push(
