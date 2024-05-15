@@ -39,7 +39,7 @@ class _MainPageState extends State<MainPage> {
           AppData(loginData: Provider.of<LoginData>(context, listen: false)),
       builder: (context, child) {
         return Scaffold(
-          body: screens[selectedIndex],
+          body: SafeArea(child: screens[selectedIndex]),
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: Theme.of(context).colorScheme.primary,

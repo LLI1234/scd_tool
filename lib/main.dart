@@ -46,9 +46,6 @@ class MyApp extends StatelessWidget {
               ? RouteManager.login
               : RouteManager.main,
           onGenerateRoute: RouteManager.generateRoute,
-          builder: (context, child) {
-            return SafeArea(child: child!);
-          },
         );
       },
     );
