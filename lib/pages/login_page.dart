@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(child: Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(50.0),
         child: Column(
@@ -113,6 +113,6 @@ class _LoginScreenState extends State<LoginPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
