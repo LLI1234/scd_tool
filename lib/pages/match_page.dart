@@ -36,7 +36,24 @@ class _MatchPageState extends State<MatchPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(), // Loading spinner
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(), // Loading spinner
+                  SizedBox(height: 20), // Add some spacing
+                  Text(
+                    'Please Wait,\nGenerating Matches...',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0, // Set the font size
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary, // Change the text color
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         } else if (snapshot.hasError) {
@@ -54,7 +71,19 @@ class _MatchPageState extends State<MatchPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Selected By Users Like You',
+                        'Explore Matched Physicians',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15.0),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Top Physician Selected By Similar Users',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w700,
@@ -73,7 +102,7 @@ class _MatchPageState extends State<MatchPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Matches For You',
+                        'Your Best Matching Physicians',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w700,
@@ -83,7 +112,7 @@ class _MatchPageState extends State<MatchPage> {
                     SizedBox(height: 5.0),
                     ...appData.scoredPhysicians.map((physician) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        padding: const EdgeInsets.symmetric(vertical: 7.0),
                         child: MatchCard(
                           physician: physician,
                         ),

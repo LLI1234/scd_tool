@@ -152,7 +152,7 @@ class _MatchCardState extends State<MatchCard> {
                                                           },
                                                         ),
                                                         ElevatedButton(
-                                                          child: Text('OK',
+                                                          child: Text('SURE',
                                                               style: TextStyle(
                                                                   color: Theme.of(
                                                                           context)
