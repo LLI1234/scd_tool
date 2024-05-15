@@ -127,7 +127,7 @@ class _DetailsPageState extends State<DetailsPage> {
           }
         }
 
-        return Scaffold(
+        return SafeArea(child: Scaffold(
           body: Center(
             child: Container(
               width: double.infinity,
@@ -557,7 +557,7 @@ class _DetailsPageState extends State<DetailsPage> {
               ]),
             ),
           ),
-        );
+        ));
       }
     });
   }
