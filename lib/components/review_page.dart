@@ -33,7 +33,7 @@ class _ReviewPageState extends State<ReviewPage> {
   Widget build(BuildContext context) {
     List<String> traits = ['Welcoming', 'Knowledgeable'];
 
-    return Scaffold(
+    return SafeArea(child: Scaffold(
       body: Center(
         child: Container(
           width: double.infinity,
@@ -178,6 +178,6 @@ class _ReviewPageState extends State<ReviewPage> {
           ]),
         ),
       ),
-    );
+    ));
   }
 }
