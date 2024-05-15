@@ -51,17 +51,18 @@ class _SavedPageState extends State<SavedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Saved Physicians',
+                            'Manage Saved Physicians',
                             style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 28.0,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 5.0),
+                        const SizedBox(height: 10.0),
                         if (appData.savedPhysicians.isEmpty)
                           Container(
                               height: 500,
@@ -71,7 +72,7 @@ class _SavedPageState extends State<SavedPage> {
                           ...appData.savedPhysicians.map((physician) {
                             return Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
+                                  const EdgeInsets.symmetric(vertical: 7.0),
                               child: MatchCard(
                                 physician: physician,
                                 hasScore: false,

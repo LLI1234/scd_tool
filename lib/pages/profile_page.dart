@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
+import 'package:scd_tool/components/personality_slider.dart';
 
 import '../models/login_data.dart';
 
@@ -740,6 +741,365 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0), //SizedBox
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Personality Preferences',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            double selectedConciseOutgoing =
+                                user['attribute1'] * 10;
+                            double selectedCompassionateAnalytical =
+                                user['attribute2'] * 10;
+                            double selectedOrganizedFlexible =
+                                user['attribute3'] * 10;
+                            double selectedRespectfulCurious =
+                                user['attribute4'] * 10;
+                            double selectedHumbleAmbitious =
+                                user['attribute5'] * 10;
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter setState) {
+                                  return AlertDialog(
+                                    title: Text('Edit Info'),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            'Concise vs Outgoing',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            child: Slider(
+                                              value: selectedConciseOutgoing,
+                                              min: 0,
+                                              max: 10,
+                                              divisions: 10,
+                                              onChanged: (double newValue) {
+                                                setState(() {
+                                                  selectedConciseOutgoing =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            'Compassionate vs Analytical',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            child: Slider(
+                                              value:
+                                                  selectedCompassionateAnalytical,
+                                              min: 0,
+                                              max: 10,
+                                              divisions: 10,
+                                              onChanged: (double newValue) {
+                                                setState(() {
+                                                  selectedCompassionateAnalytical =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            'Organized vs Flexible',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            child: Slider(
+                                              value: selectedOrganizedFlexible,
+                                              min: 0,
+                                              max: 10,
+                                              divisions: 10,
+                                              onChanged: (double newValue) {
+                                                setState(() {
+                                                  selectedOrganizedFlexible =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            'Respectful vs Curious',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            child: Slider(
+                                              value: selectedRespectfulCurious,
+                                              min: 0,
+                                              max: 10,
+                                              divisions: 10,
+                                              onChanged: (double newValue) {
+                                                setState(() {
+                                                  selectedRespectfulCurious =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            'Humble vs Ambitious',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            child: Slider(
+                                              value: selectedHumbleAmbitious,
+                                              min: 0,
+                                              max: 10,
+                                              divisions: 10,
+                                              onChanged: (double newValue) {
+                                                setState(() {
+                                                  selectedHumbleAmbitious =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          // Add more TextFields and DropdownButtons for other info
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancel'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Save'),
+                                        onPressed: () async {
+                                          // Collect the inputs and send them to the backend
+
+                                          // Create a map of the data
+                                          Map<String, dynamic> data = {
+                                            'attribute1':
+                                                selectedConciseOutgoing / 10,
+                                            'attribute2':
+                                                selectedCompassionateAnalytical /
+                                                    10,
+                                            'attribute3':
+                                                selectedOrganizedFlexible / 10,
+                                            'attribute4':
+                                                selectedRespectfulCurious / 10,
+                                            'attribute5':
+                                                selectedHumbleAmbitious / 10,
+                                          };
+
+                                          // Convert the data to JSON
+                                          String body = json.encode(data);
+
+                                          print(body);
+
+                                          String cookie = context
+                                              .read<LoginData>()
+                                              .getCookie();
+
+                                          // Send the data to the backend
+                                          var response = await http.put(
+                                            Uri.parse(
+                                                'https://scd-tool-api.onrender.com/user/current'), // Replace with your backend URL
+                                            headers: {
+                                              'Content-Type':
+                                                  'application/json; charset=UTF-8',
+                                              "Cookie": cookie,
+                                            },
+                                            body: body,
+                                          );
+
+                                          // Check the status code of the response
+                                          if (response.statusCode == 200) {
+                                            print('Data sent successfully');
+                                          } else {
+                                            print('Failed to send data');
+                                            print(response.statusCode);
+                                          }
+
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                              },
+                            );
+                          },
+                          child: Text(
+                            'Edit Info',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0))),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Concise vs Outgoing',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Slider(
+                            value: user['attribute1'] * 10,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      margin: EdgeInsets.only(top: 3.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Compassionate vs Analytical',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Slider(
+                            value: user['attribute2'] * 10,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      margin: EdgeInsets.only(top: 3.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Organized vs Flexible',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Slider(
+                            value: user['attribute3'] * 10,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      margin: EdgeInsets.only(top: 3.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Respectful vs Curious',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Slider(
+                            value: user['attribute4'] * 10,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0))),
+                      margin: EdgeInsets.only(top: 3.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Humble vs Ambitious',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Slider(
+                            value: user['attribute5'] * 10,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: null,
                           ),
                         ],
                       ),
