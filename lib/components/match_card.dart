@@ -58,8 +58,7 @@ class _MatchCardState extends State<MatchCard> {
                   Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: widget.physician['image_link'] !=
-                                  null
+                          image: widget.physician['image_link'] != null
                               ? NetworkImage(
                                       widget.physician['center']['image_link'])
                                   as ImageProvider<Object>
@@ -99,7 +98,8 @@ class _MatchCardState extends State<MatchCard> {
                                 if (widget
                                     .hasScore) // If hasScore is true, render the score
                                   Text(
-                                    widget.physician["match_score"].toStringAsFixed(1),
+                                    widget.physician["match_score"]
+                                        .toStringAsFixed(1),
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.primary,
