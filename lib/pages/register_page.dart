@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     final response =
-        await http.post(Uri.parse('http://scd-tool-api.onrender.com/user'),
+        await http.post(Uri.parse('https://scd-tool-api.onrender.com/user'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               "email": email,
