@@ -15,4 +15,4 @@ This application was developed in collaboration with Novo Nordisk to support sic
 `flutter run`
 
 ### Backend:
-[https://github.com/ljb135/scd_tool_api](https://github.com/ljb135/scd_tool_api)
+[https://github.com/LLI1234/scd_tool_api](https://github.com/LLI1234/scd_tool_api)
